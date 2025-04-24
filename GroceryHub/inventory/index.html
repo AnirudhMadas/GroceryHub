@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GroceryHub - Inventory Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3h18v18H3z"></path>
+                <path d="M7 7v10M12 7v10M17 7v10M21 7H3M21 12H3M21 17H3"></path>
+            </svg>
+            GroceryTrack
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/usingClaude/index.html">Dashboard</a></li>
+                <li><a href="inventory.html" class="active">Inventory</a></li>
+                <li><a href="billing.html">Billing</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Inventory Management</h1>
+        <p>Manage your store's inventory, update stock levels, and track product information.</p>
+        
+        <div id="successAlert" class="alert alert-success" style="display: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            <span id="alertMessage">Inventory updated successfully!</span>
+        </div>
+        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by product name, ID, or category...">
+            <button class="btn" onclick="searchProducts()">Search</button>
+        </div>
+        
+        <div class="filters">
+            <div class="filter-group">
+                <label>Category:</label>
+                <select id="categoryFilter" onchange="applyFilters()">
+                    <option value="">All Categories</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Bakery">Bakery</option>
+                    <option value="Produce">Produce</option>
+                    <option value="Meat">Meat</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Canned Goods">Canned Goods</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Stock Level:</label>
+                <select id="stockFilter" onchange="applyFilters()">
+                    <option value="">All Levels</option>
+                    <option value="low">Low Stock</option>
+                    <option value="medium">Medium Stock</option>
+                    <option value="good">Good Stock</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>Sort By:</label>
+                <select id="sortBy" onchange="applyFilters()">
+                    <option value="name">Name (A-Z)</option>
+                    <option value="name-desc">Name (Z-A)</option>
+                    <option value="price">Price (Low-High)</option>
+                    <option value="price-desc">Price (High-Low)</option>
+                    <option value="stock">Stock (Low-High)</option>
+                    <option value="stock-desc">Stock (High-Low)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0;">
+            <button class="btn btn-primary" onclick="openAddProductModal()">+ Add New Product</button>
+            
+            <div class="import-export">
+                <input type="file" id="importFile" class="file-input" accept=".csv">
+                <label for="importFile" class="file-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Import CSV
+                </label>
+                
+                <button class="btn" onclick="exportToCSV()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom;">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Export CSV
+                </button>
+            </div>
+        </div>
+        
+        <div class="data-info">
+            <p><strong>Data Source:</strong> This inventory is based on the Kaggle Grocery Store Dataset, formatted for compatibility with standard inventory management systems.</p>
+            <p><strong>Last Updated:</strong> <span id="lastUpdated">April 7, 2025 10:15 AM</span></p>
+        </div>
+        
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Current Stock</th>
+                    <th>Reorder Level</th>
+                    <th>Edit Stock</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Inventory data will be loaded here dynamically -->
+            </tbody>
+        </table>
+        
+        <div class="pagination" id="pagination">
+            <button onclick="changePage(1)" class="active">1</button>
+            <button onclick="changePage(2)">2</button>
+            <button onclick="changePage(3)">3</button>
+            <button>...</button>
+            <button onclick="changePage(10)">10</button>
+        </div>
+        
+        <!-- Add/Edit Product Modal -->
+        <div id="productModal" class="modal">
+            <div class="modal-content">
+                <h2 id="modalTitle">Add New Product</h2>
+                <form id="productForm">
+                    <div class="form-group">
+                        <label for="productId">Product ID</label>
+                        <input type="text" id="productId" placeholder="e.g. P001">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" placeholder="Enter product name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory">
+                            <option value="Dairy">Dairy</option>
+                            <option value="Bakery">Bakery</option>
+                            <option value="Produce">Produce</option>
+                            <option value="Meat">Meat</option>
+                            <option value="Beverages">Beverages</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Canned Goods">Canned Goods</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productPrice">Price ($)</label>
+                        <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productStock">Current Stock</label>
+                        <input type="number" id="productStock" min="0" placeholder="0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reorderLevel">Reorder Level</label>
+                        <input type="number" id="reorderLevel" min="1" placeholder="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productDescription">Description (Optional)</label>
+                        <textarea id="productDescription" rows="3" placeholder="Enter product description"></textarea>
+                    </div>
+                    
+                    <div class="modal-actions">
+                        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Confirm Delete Modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <h2>Confirm Deletion</h2>
+                <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeDeleteModal()">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="first.js"></script>
+    <footer>
+        <p>&copy; 2025 GroceryTrack Inventory Management System</p>
+    </footer>
+
+    

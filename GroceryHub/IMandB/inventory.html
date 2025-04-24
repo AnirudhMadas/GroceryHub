@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inventory - GroceryHub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <div class="logo" style="font-family: 'Poppins', sans-serif; font-size: 1.2rem; display: flex; align-items: center; gap: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <!-- Shopping Cart Icon -->
+                <circle cx="9" cy="21" r="1"></circle>
+                <circle cx="20" cy="21" r="1"></circle>
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            GroceryHub
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/dashboard/index.html">Dashboard</a></li>
+                <li><a href="/IMandB/inventory.html" class="active">Inventory</a></li>
+                <li><a href="/IMandB/billing.html">Billing</a></li>
+                <li><a href="#">Reports</a></li>
+                <li><a href="#">Alerts</a></li>
+                <li><a href="#">Feedback</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Inventory Management</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Search inventory..." />
+            <button class="btn">Search</button>
+        </div>
+        <button class="btn btn-primary" style="margin-bottom: 1rem;">+ Add New Product</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock Level</th>
+                    <th>Reorder Level</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>P001</td>
+                    <td>Milk (2%)</td>
+                    <td>Dairy</td>
+                    <td>$3.99</td>
+                    <td><span class="stock-level stock-low">5</span></td>
+                    <td>10</td>
+                    <td>
+                        <button class="btn btn-primary">Edit</button>
+                        <button class="btn">Reorder</button>
+                    </td>
+                </tr>
+                <!-- More rows can be added dynamically -->
+            </tbody>
+        </table>
+    </main>
+    <script src="first.js"></script>
+    <footer>
+        <p>&copy; 2025 GroceryHub Inventory System</p>
+    </footer>
+</body>
+</html>
