@@ -1,53 +1,82 @@
 import inventorySchema from "../models/item.js";
 
-const getInventory = async (req,res)=>{
+/* ---------- GET INVENTORY ---------- */
+const getInventory = async (req, res) => {
+  try {
     const inventory = await inventorySchema.find();
-    return res.json(inventory);
-}
+    return res.status(200).json(inventory);
+  } catch (error) {
+    console.error("getInventory error:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
 
-const addInventory = async (req,res)=>{
-    const body = req.body || {};
-    const {productName,quantity,price,category,productImage} = body;
-    if(!productName){
-        res.json({message:"Product Name should not be Empty"});
-    }
-    const newItem = await inventorySchema.create({
-        productName,quantity,price,category,productImage
-    })
-    return res.json(newItem);
-}
-
-const editInventory = async (req, res) => {
+/* ---------- ADD INVENTORY ---------- */
+const addInventory = async (req, res) => {
   try {
     const body = req.body || {};
     const { productName, quantity, price, category, productImage } = body;
 
+    if (!productName) {
+      return res.status(400).json({
+        message: "Product Name should not be empty",
+      });
+    }
+
+    const newItem = await inventorySchema.create({
+      productName,
+      quantity,
+      price,
+      category,
+      productImage,
+    });
+
+    return res.status(201).json(newItem);
+  } catch (error) {
+    console.error("addInventory error:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+/* ---------- EDIT INVENTORY ---------- */
+const editInventory = async (req, res) => {
+  try {
     const { id } = req.params;
     if (!id) {
-      return res.status(400).json({ error: "Missing item id in route params" });
+      return res.status(400).json({ error: "Missing item id" });
     }
-    const update = {};
-    if (productName !== undefined) update.productName = productName;
-    if (quantity !== undefined) update.quantity = quantity;
-    if (price !== undefined) update.price = price;
-    if (category !== undefined) update.category = category;
-    if (productImage !== undefined) update.productImage = productImage;
 
-    const updatedItem = await inventorySchema.findByIdAndUpdate(id, update, { new: true });
+    const updatedItem = await inventorySchema.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
 
     if (!updatedItem) {
       return res.status(404).json({ error: "Item not found" });
     }
-    return res.json({ message: "Item updated", item: updatedItem });
+
+    return res.json({
+      message: "Item updated",
+      item: updatedItem,
+    });
   } catch (err) {
     console.error("editInventory error:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
 
+/* ---------- DELETE INVENTORY ---------- */
+const deleteInventory = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-const deleteInventory = (req,res)=>{
-    res.json({message:"hello"});
-}
+    await inventorySchema.findByIdAndDelete(id);
 
-export  {getInventory,addInventory,editInventory,deleteInventory};
+    return res.json({ message: "Item deleted" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export { getInventory, addInventory, editInventory, deleteInventory };

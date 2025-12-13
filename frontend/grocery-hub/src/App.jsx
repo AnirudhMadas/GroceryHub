@@ -1,30 +1,73 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Outlet,
+} from "react-router-dom";
+
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+
 import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
 import Billing from "./pages/Billing";
 import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Feedback from "./pages/Feedback";
-import Footer from "./components/Footer";
 
-export default function App() {
+import axios from "axios";
+import { productLoader } from "./loaders/productLoader";
+
+/* ---------- LAYOUT ---------- */
+const Layout = () => {
   return (
-    <BrowserRouter>
-      <div className="app">
-        <Navbar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/billing" element={<Billing />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/feedback" element={<Feedback />} />
-          </Routes>
-        </main>
-      </div>
+    <div className="app">
+      <Navbar />
+      <main className="main-content">
+        <Outlet />
+      </main>
       <Footer />
-    </BrowserRouter>
+    </div>
   );
+};
+
+
+
+/* ---------- ROUTER ---------- */
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+        loader: productLoader, // ✅ CORRECT PLACE
+      },
+      {
+        path: "inventory",
+        element: <Inventory />,
+      },
+      {
+        path: "billing",
+        element: <Billing />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
+      },
+      {
+        path: "alerts",
+        element: <Alerts />,
+      },
+      {
+        path: "feedback",
+        element: <Feedback />,
+      },
+    ],
+  },
+]);
+
+/* ---------- APP ---------- */
+export default function App() {
+  return <RouterProvider router={router} />;
 }

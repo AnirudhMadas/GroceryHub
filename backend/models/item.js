@@ -22,6 +22,6 @@ const itemSchema = mongoose.Schema({
     }
 },{timestamps : true})
 
-const inventorySchema = mongoose.model("Inventory",itemSchema);
+const inventorySchema = mongoose.model("inventory",itemSchema,"inventory");
 
 export default inventorySchema;

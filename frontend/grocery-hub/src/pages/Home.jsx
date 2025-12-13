@@ -1,7 +1,13 @@
 import React from "react";
+import { useLoaderData } from "react-router-dom";
 import "../styles/Home.css";
+import Products from "../components/Products";
 
 const Home = () => {
+  // ✅ Get data returned by loader
+  const products = useLoaderData();
+  console.log(products);
+
   return (
     <div className="home-container">
       {/* Hero Section */}
@@ -50,7 +56,11 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
+
+      {/* Products Section */}
+      <div className="products">
+        <Products products={products} />
+      </div>
     </div>
   );
 };
