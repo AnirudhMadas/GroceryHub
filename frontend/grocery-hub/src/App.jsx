@@ -46,6 +46,7 @@ const router = createBrowserRouter([
       {
         path: "inventory",
         element: <Inventory />,
+        loader: productLoader,
       },
       {
         path: "billing",
