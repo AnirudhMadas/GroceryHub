@@ -1,0 +1,58 @@
+import React from "react";
+import "../styles/Home.css";
+
+const Home = () => {
+  return (
+    <div className="home-container">
+      {/* Hero Section */}
+      <section className="hero">
+        <h1>Manage Your Grocery Store with GroceryHub</h1>
+
+        <h3>
+          Streamline your operations with our all-in-one inventory management
+          solution.
+        </h3>
+
+        <p>
+          GroceryHub empowers grocery store owners to efficiently manage stock,
+          process transactions, and gain insights through powerful reporting
+          tools, all in a user-friendly platform.
+        </p>
+      </section>
+
+      {/* Features Section */}
+      <section className="features">
+        <h2>Key Features</h2>
+
+        <div className="feature-grid">
+          <div className="feature-card">
+            <div className="icon">📦</div>
+            <h4>Inventory Management</h4>
+            <p>Track and update stock levels in real-time with ease.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="icon">💲</div>
+            <h4>Billing</h4>
+            <p>Process transactions quickly and view billing history.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="icon">📊</div>
+            <h4>Reports</h4>
+            <p>Generate detailed sales and inventory reports for insights.</p>
+          </div>
+
+          <div className="feature-card">
+            <div className="icon">⚠️</div>
+            <h4>Alerts</h4>
+            <p>Stay informed with notifications for low stock and updates.</p>
+          </div>
+        </div>
+      </section>
+      
+    </div>
+  );
+};
+
+export default Home;
