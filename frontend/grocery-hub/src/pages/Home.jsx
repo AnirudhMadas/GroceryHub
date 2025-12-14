@@ -56,11 +56,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Products Section */}
-      <div className="products">
-        <Products products={products} />
-      </div>
     </div>
   );
 };
