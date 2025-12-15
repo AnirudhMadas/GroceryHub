@@ -9,17 +9,24 @@ const ProductCard = ({ product }) => {
     productImage,
   } = product;
 
-  const stockStatus =
-    quantity > 20 ? "In Stock" : "Low Stock";
+  let stockStatus = "In Stock";
+  let stockClass = "green";
+
+  if (quantity === 0) {
+    stockStatus = "Out of Stock";
+    stockClass = "red";
+  } else if (quantity <= 10) {
+    stockStatus = "Low Stock";
+    stockClass = "orange";
+  }
 
   return (
-    <div className={`product-card ${stockStatus === "In Stock" ? "in-stock" : "low-stock"}`}>
-      
+    <div className="product-card">
       {/* Category */}
       <span className="category-badge">{category}</span>
 
       {/* Stock status */}
-      <span className={`stock-badge ${stockStatus === "In Stock" ? "green" : "orange"}`}>
+      <span className={`stock-badge ${stockClass}`}>
         {stockStatus}
       </span>
 

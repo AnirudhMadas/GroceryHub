@@ -5,15 +5,16 @@
 }
 
 .product-card {
-  background: #fff;
-  border-radius: 12px;
+  background: #ffffff;
+  border-radius: 14px;
   padding: 15px;
   position: relative;
   box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
 }
 
-.product-card.in-stock {
-  background: #6ed39c;
+.product-card:hover {
+  transform: translateY(-4px);
 }
 
 .product-card img {
@@ -33,19 +34,26 @@
   font-size: 12px;
 }
 
-.stock-badge.green {
+.stock-badge {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #2e7d32;
   color: white;
   padding: 4px 8px;
   border-radius: 6px;
   font-size: 12px;
 }
 
+.stock-badge.green {
+  background: #2e7d32;
+}
+
 .stock-badge.orange {
   background: #f57c00;
+}
+
+.stock-badge.red {
+  background: #c62828;
 }
 
 .actions {
@@ -68,6 +76,6 @@
 }
 
 .delete-btn {
-  background: #1b5e20;
+  background: #c62828;
   color: white;
 }
