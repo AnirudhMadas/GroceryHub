@@ -13,6 +13,7 @@ import Billing from "./pages/Billing";
 import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Feedback from "./pages/Feedback";
+import Auth from "./pages/Auth";
 
 import axios from "axios";
 import { productLoader } from "./loaders/productLoader";
@@ -25,7 +26,6 @@ const Layout = () => {
       <main className="main-content">
         <Outlet />
       </main>
-      <Footer />
     </div>
   );
 };
@@ -63,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "feedback",
         element: <Feedback />,
+      },
+      {
+        path: "auth",
+        element: <Auth />,
       },
     ],
   },
