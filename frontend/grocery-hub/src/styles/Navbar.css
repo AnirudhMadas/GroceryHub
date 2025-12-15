@@ -74,3 +74,9 @@
   font-size: 14px;
   font-weight: 600
 }
+
+.user-email {
+  font-size: 14px;
+  color: #374151;
+  font-weight: 500;
+}

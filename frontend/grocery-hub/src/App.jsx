@@ -15,7 +15,7 @@ import Alerts from "./pages/Alerts";
 import Feedback from "./pages/Feedback";
 import Auth from "./pages/Auth";
 
-import axios from "axios";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { productLoader } from "./loaders/productLoader";
 
 /* ---------- LAYOUT ---------- */
@@ -30,8 +30,6 @@ const Layout = () => {
   );
 };
 
-
-
 /* ---------- ROUTER ---------- */
 const router = createBrowserRouter([
   {
@@ -41,29 +39,51 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
-        loader: productLoader, // ✅ CORRECT PLACE
-      },
-      {
-        path: "inventory",
-        element: <Inventory />,
         loader: productLoader,
       },
+
+      {
+        path: "inventory",
+        element: (
+          <ProtectedRoute>
+            <Inventory />
+          </ProtectedRoute>
+        ),
+        loader: productLoader,
+      },
+
       {
         path: "billing",
-        element: <Billing />,
+        element: (
+          <ProtectedRoute>
+            <Billing />
+          </ProtectedRoute>
+        ),
       },
+
       {
         path: "reports",
-        element: <Reports />,
+        element: (
+          <ProtectedRoute>
+            <Reports />
+          </ProtectedRoute>
+        ),
       },
+
       {
         path: "alerts",
-        element: <Alerts />,
+        element: (
+          <ProtectedRoute>
+            <Alerts />
+          </ProtectedRoute>
+        ),
       },
+
       {
         path: "feedback",
         element: <Feedback />,
       },
+
       {
         path: "auth",
         element: <Auth />,

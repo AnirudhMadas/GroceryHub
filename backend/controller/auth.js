@@ -1,4 +1,4 @@
-import User from "../models/auth.js";
+import User from "../models/User.js"; 
 import bcrypt from "bcryptjs";
 
 /* =========================
@@ -24,13 +24,16 @@ export const signup = async (req, res) => {
       password: hashedPassword,
     });
 
+    // ✅ Stored in grocery -> User collection
     res.status(201).json({
       message: "User registered successfully",
-      userId: user._id,
       email: user.email,
     });
   } catch (error) {
-    res.status(500).json({ message: "Signup failed", error: error.message });
+    res.status(500).json({
+      message: "Signup failed",
+      error: error.message,
+    });
   }
 };
 
@@ -57,10 +60,12 @@ export const login = async (req, res) => {
 
     res.status(200).json({
       message: "Login successful",
-      userId: user._id,
       email: user.email,
     });
   } catch (error) {
-    res.status(500).json({ message: "Login failed", error: error.message });
+    res.status(500).json({
+      message: "Login failed",
+      error: error.message,
+    });
   }
 };

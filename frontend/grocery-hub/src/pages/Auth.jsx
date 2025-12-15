@@ -1,54 +1,100 @@
- import React, { useState } from "react";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "../styles/Auth.css";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (isLogin) {
-      console.log("LOGIN");
-    } else {
-      console.log("SIGNUP");
+    try {
+      const url = isLogin
+        ? "http://localhost:5000/api/auth/login"
+        : "http://localhost:5000/api/auth/signup";
+
+      const res = await axios.post(url, {
+        email,
+        password,
+      });
+
+      // Save user in context
+      login({ email: res.data.email });
+
+      // Redirect after auth
+      navigate("/");
+    } catch (err) {
+      setError(err.response?.data?.message || "Authentication failed");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>{isLogin ? "Login" : "Create Account"}</h2>
+    <div className="auth-wrapper">
+      <div className="auth-card">
 
-      <form onSubmit={handleSubmit}>
-        {!isLogin && (
-          <input
-            type="text"
-            placeholder="Full Name"
-            required
-          />
-        )}
+        {/* LEFT PANEL */}
+        <div className="auth-left">
+          <h2>{isLogin ? "Welcome Back" : "Join GroceryHub"}</h2>
+          <p>
+            {isLogin
+              ? "Login securely to manage your grocery store"
+              : "Create an account and start managing your store"}
+          </p>
 
-        <input
-          type="email"
-          placeholder="Email"
-          required
-        />
+          <button
+            className="switch-btn"
+            onClick={() => setIsLogin(!isLogin)}
+          >
+            {isLogin ? "Sign Up" : "Login"}
+          </button>
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          required
-        />
+        {/* RIGHT PANEL */}
+        <div className="auth-right">
+          <h3>{isLogin ? "Login" : "Sign Up"}</h3>
 
-        <button type="submit">
-          {isLogin ? "Login" : "Sign Up"}
-        </button>
-      </form>
+          <form onSubmit={handleSubmit}>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
-      <p className="toggle-text">
-        {isLogin ? "Don't have an account?" : "Already have an account?"}
-        <span onClick={() => setIsLogin(!isLogin)}>
-          {isLogin ? " Sign Up" : " Login"}
-        </span>
-      </p>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            {error && <p style={{ color: "red" }}>{error}</p>}
+
+            <button type="submit" className="auth-submit">
+              {isLogin ? "Login" : "Create Account"}
+            </button>
+          </form>
+
+          <p className="toggle-text">
+            {isLogin ? "Don’t have an account?" : "Already have an account?"}
+            <span onClick={() => setIsLogin(!isLogin)}>
+              {isLogin ? " Sign Up" : " Login"}
+            </span>
+          </p>
+        </div>
+
+      </div>
     </div>
   );
 };
