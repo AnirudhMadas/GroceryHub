@@ -1,0 +1,22 @@
+# Ignore all files with the .log extension
+*.log
+
+# Ignore a specific file named "debug.log" in the root directory
+/debug.log
+
+# Ignore an entire directory named "temp" and all its contents
+temp/
+
+# Ignore the "node_modules" directory, common in Node.js projects
+node_modules/
+
+# Ignore specific OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore files containing sensitive data (e.g., environment variables)
+.env
+
+# Exclude everything in a directory except a specific file
+/logs/*
+!/logs/important.log

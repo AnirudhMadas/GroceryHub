@@ -1,0 +1,26 @@
+{
+  "name": "groceryhub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "backend": "cd backend && npm start",
+    "frontend": "cd frontend/grocery-hub && npm run dev",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnirudhMadas/GroceryHub.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/AnirudhMadas/GroceryHub/issues"
+  },
+  "homepage": "https://github.com/AnirudhMadas/GroceryHub#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
