@@ -1,6 +1,6 @@
 import "../styles/ProductCard.css";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, onEdit, onDelete }) => {
   const {
     productName,
     quantity,
@@ -22,6 +22,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="product-card">
+
       {/* Category */}
       <span className="category-badge">{category}</span>
 
@@ -43,8 +44,12 @@ const ProductCard = ({ product }) => {
 
       {/* Actions */}
       <div className="actions">
-        <button className="edit-btn">Edit</button>
-        <button className="delete-btn">Delete</button>
+        <button className="edit-btn" onClick={onEdit}>
+          Edit
+        </button>
+        <button className="delete-btn" onClick={onDelete}>
+          Delete
+        </button>
       </div>
     </div>
   );

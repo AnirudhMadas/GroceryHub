@@ -1,4 +1,3 @@
-/* ===== PAGE BACKGROUND ===== */
 .inventory-page {
   background: #f6f8fa;
   min-height: 100vh;
@@ -7,7 +6,7 @@
 /* ===== LAYOUT ===== */
 .inventory-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 260px 1fr;
   gap: 24px;
   padding: 24px;
 }
@@ -15,55 +14,56 @@
 /* ===== SIDEBAR ===== */
 .inventory-sidebar {
   display: flex;
+  flex-direction: column;   /* 🔥 KEY FIX */
+  gap: 18px;
 }
 
 .sidebar-card {
   background: #ffffff;
   border-radius: 14px;
-  padding: 20px;
-  width: 100%;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
 }
 
-.sidebar-card h3 {
-  margin-bottom: 16px;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.sidebar-card label {
-  display: block;
-  margin-top: 12px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #444;
+.sidebar-card.compact h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
 }
 
 .sidebar-card input,
 .sidebar-card select {
   width: 100%;
-  padding: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
   margin-top: 6px;
   border-radius: 8px;
   border: 1px solid #ccc;
   background: #f4f6f8;
 }
 
-.sidebar-card input:focus,
-.sidebar-card select:focus {
-  outline: none;
-  background: #fff;
-  border-color: #4caf50;
+.sidebar-card label {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 10px;
+  display: block;
 }
 
-.textColor{
-  color: black;
+.primary-btn {
+  margin-top: 12px;
+  background: #2e7d32;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: none;
 }
 
-/* ===== CONTENT ===== */
-.inventory-content {
-  display: flex;
-  flex-direction: column;
+.secondary-btn {
+  margin-top: 6px;
+  background: #e0e0e0;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
 }
 
 /* ===== SUMMARY ===== */
@@ -75,50 +75,18 @@
 }
 
 .summary-box {
-  background: #ffffff;
+  background: #fff;
   border-radius: 14px;
-  padding: 16px 18px;
+  padding: 16px;
   display: flex;
-  align-items: center;
   gap: 14px;
+  align-items: center;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   border-left: 5px solid #4caf50;
 }
 
-.summary-box.warning {
-  border-left-color: #f57c00;
-}
-
-.summary-box.success {
-  border-left-color: #2e7d32;
-}
-
-.summary-icon {
-  font-size: 26px;
-  background: rgba(76, 175, 80, 0.15);
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.summary-box.warning .summary-icon {
-  background: rgba(245, 124, 0, 0.2);
-}
-
-.summary-box.success .summary-icon {
-  background: rgba(46, 125, 50, 0.2);
-}
-
-.summary-label {
-  font-size: 13px;
-  color: #666;
-  margin: 0;
-}
-
-.summary-box h3 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-}
+.summary-box.warning { border-left-color: #f57c00; }
+.summary-box.success { border-left-color: #2e7d32; }
 
 /* ===== PRODUCTS ===== */
 .product-grid {
@@ -130,44 +98,28 @@
   .inventory-layout {
     grid-template-columns: 1fr;
   }
-
-  .inventory-sidebar {
-    order: 2;
-  }
-
-  .inventory-content {
-    order: 1;
-  }
 }
 
-/* ===== ACTIVE FILTER STATE ===== */
-.sidebar-card select.active-filter,
-.sidebar-card input.active-filter {
-  background: #ffffff;
-  border-color: #4caf50;
-  font-weight: 600;
-  color: #222;
-}
 
-/* Placeholder softer */
-.sidebar-card input::placeholder {
-  color: #999;
-  font-weight: 400;
-}
-
-/* Default select text clarity */
+/* ===== FORCE INPUT TEXT COLOR ===== */
+.sidebar-card input,
 .sidebar-card select {
-  color: #444;
+  color: #000 !important;          /* text color */
 }
 
-/* Focus state stronger */
-.sidebar-card select:focus,
-.sidebar-card input:focus {
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.25);
+/* Placeholder text */
+.sidebar-card input::placeholder {
+  color: #666;
 }
 
-/* Optional: subtle checkmark feel */
-.sidebar-card select.active-filter {
-  background-image: linear-gradient(to right, #ffffff, #f1fff3);
+/* When typing / focused */
+.sidebar-card input:focus,
+.sidebar-card select:focus {
+  color: #000 !important;
 }
 
+/* Dropdown options */
+.sidebar-card select option {
+  color: #000;
+  background: #fff;
+}
