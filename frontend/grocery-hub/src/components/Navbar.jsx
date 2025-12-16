@@ -30,7 +30,6 @@ const Navbar = () => {
         {/* AUTH SECTION */}
         {user ? (
           <>
-            <li className="user-email">{user.email}</li>
             <li>
               <button className="login-btn" onClick={logout}>
                 Logout
