@@ -25,7 +25,7 @@ const Navbar = () => {
           </>
         )}
 
-        <li><NavLink to="/feedback">Feedback</NavLink></li>
+
 
         {/* AUTH SECTION */}
         {user ? (

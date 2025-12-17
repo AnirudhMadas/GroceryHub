@@ -1,8 +1,4 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Outlet,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -14,6 +10,7 @@ import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Feedback from "./pages/Feedback";
 import Auth from "./pages/Auth";
+import Invoices from "./pages/Invoices";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { productLoader } from "./loaders/productLoader";
@@ -78,12 +75,6 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-
-      {
-        path: "feedback",
-        element: <Feedback />,
-      },
-
       {
         path: "auth",
         element: <Auth />,
