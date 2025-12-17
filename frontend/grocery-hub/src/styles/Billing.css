@@ -1,11 +1,17 @@
 .billing-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e8fdf5, #eef4ff);
+  position: relative;
+  background:
+    radial-gradient(circle at top left, #bbf7d0 0%, transparent 40%),
+    radial-gradient(circle at bottom right, #c7d2fe 0%, transparent 40%),
+    linear-gradient(135deg, #ecfeff, #f8fafc);
   display: flex;
   justify-content: center;
-  padding: 60px 20px;
-  font-family: "Inter", sans-serif;
+  padding: 70px 20px;
+  overflow: hidden;
 }
+
+
 
 .billing-card {
   width: 100%;
