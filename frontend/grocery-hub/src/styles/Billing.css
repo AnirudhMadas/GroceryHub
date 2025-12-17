@@ -1,0 +1,171 @@
+.billing-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e8fdf5, #eef4ff);
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+  font-family: "Inter", sans-serif;
+}
+
+.billing-card {
+  width: 100%;
+  max-width: 720px;
+  background: white;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.billing-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #1f2937;
+}
+
+.billing-form {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 12px;
+  position: relative;
+}
+
+.billing-form input {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 15px;
+}
+
+.billing-form input:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* Suggestions */
+.suggestions {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.suggestion-item {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #dcfce7;
+}
+
+.suggestion-item.out {
+  background: #fef2f2;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.price {
+  font-size: 13px;
+  color: #374151;
+}
+
+.stock-badge {
+  background: #ef4444;
+  color: white;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 10px;
+}
+
+/* Cart */
+.cart {
+  margin-top: 30px;
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.cart p {
+  text-align: center;
+  color: #6b7280;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-sub {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Remove button */
+.remove-btn {
+  background: #fee2e2;
+  border: none;
+  color: #dc2626;
+  font-size: 18px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+/* Footer */
+.billing-footer {
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #4caf50, #22c55e);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.billing-footer button {
+  background: white;
+  color: #16a34a;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.billing-footer button:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .billing-form {
+    grid-template-columns: 1fr;
+  }
+
+  .billing-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
