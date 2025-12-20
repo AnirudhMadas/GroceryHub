@@ -9,14 +9,27 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return this.provider === "local";
+      },
+    },
+
+    googleId: {
+      type: String,
+    },
+
+    provider: {
+      type: String,
+      enum: ["local", "google"],
+      default: "local",
     },
   },
   {
     timestamps: true,
-    collection: "User", // ✅ EXACT COLLECTION NAME
+    collection: "User", // ✅ SAME COLLECTION
   }
 );
 

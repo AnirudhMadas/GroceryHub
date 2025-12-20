@@ -1,8 +1,9 @@
 import { useLoaderData } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
 import ProductCard from "../components/ProductCard";
 import "../styles/Inventory.css";
+import authAxios from "../utils/authAxios";
+
 
 const Inventory = () => {
   /* ---------- LOADER → STATE SYNC ---------- */
@@ -94,43 +95,55 @@ const Inventory = () => {
 
   /* ---------- ADD / UPDATE ---------- */
   const handleSubmit = async () => {
-    try {
-      if (!formData.productName || !formData.price) {
-        alert("Product name and price are required");
-        return;
-      }
+  try {
+    if (!formData.productName || !formData.price) {
+      alert("Product name and price are required");
+      return;
+    }
 
-      const payload = {
-        ...formData,
-        quantity: Number(formData.quantity),
-        price: Number(formData.price),
-      };
+    const payload = {
+      ...formData,
+      quantity: Number(formData.quantity),
+      price: Number(formData.price),
+    };
 
-      if (isEditing && editId) {
-        const res = await axios.put(
-          `http://localhost:5000/api/inventory/${editId}`,
-          payload
-        );
+    let res;
 
-        setProducts((prev) =>
-          prev.map((p) =>
-            p._id === editId ? res.data : p
-          )
-        );
-      } else {
-        const res = await axios.post(
-          "http://localhost:5000/api/inventory",
-          payload
-        );
-        setProducts((prev) => [...prev, res.data]);
-      }
+    if (isEditing && editId) {
+      // 🔐 EDIT INVENTORY (JWT INCLUDED)
+      res = await authAxios.put(
+        `/api/inventory/${editId}`,
+        payload
+      );
 
-      resetForm();
-    } catch (err) {
-      console.error("SUBMIT FAILED:", err);
+      setProducts((prev) =>
+        prev.map((p) => (p._id === editId ? res.data : p))
+      );
+    } else {
+      // 🔐 ADD INVENTORY (JWT INCLUDED)
+      res = await authAxios.post(
+        "/api/inventory",
+        payload
+      );
+
+      setProducts((prev) => [...prev, res.data]);
+    }
+
+    resetForm();
+  } catch (err) {
+    console.error(
+      "SUBMIT FAILED:",
+      err.response?.data || err.message
+    );
+
+    if (err.response?.status === 401) {
+      alert("Session expired. Please login again.");
+    } else {
       alert("Operation failed");
     }
-  };
+  }
+};
+
 
   /* ---------- EDIT ---------- */
   const handleEdit = (product) => {
@@ -151,16 +164,28 @@ const Inventory = () => {
 
   /* ---------- DELETE ---------- */
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this product?")) return;
+  if (!window.confirm("Delete this product?")) return;
 
-    await axios.delete(
-      `http://localhost:5000/api/inventory/${id}`
-    );
+  try {
+    await authAxios.delete(`/api/inventory/${id}`);
 
     setProducts((prev) =>
       prev.filter((p) => p._id !== id)
     );
-  };
+  } catch (err) {
+    console.error(
+      "DELETE FAILED:",
+      err.response?.data || err.message
+    );
+
+    if (err.response?.status === 401) {
+      alert("Session expired. Please login again.");
+    } else {
+      alert("Delete failed");
+    }
+  }
+};
+
 
   /* ---------- UI ---------- */
   return (

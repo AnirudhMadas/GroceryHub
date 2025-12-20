@@ -1,8 +1,10 @@
 import express from "express";
 import { getReports } from "../controller/reports.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", getReports);
+// 🔐 PROTECT REPORTS ROUTE
+router.get("/", authMiddleware, getReports);
 
 export default router;

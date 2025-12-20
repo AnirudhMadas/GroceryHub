@@ -1,9 +1,12 @@
 import inventorySchema from "../models/item.js";
 
-/* ---------- GET INVENTORY ---------- */
+/* ---------- GET INVENTORY (USER-SCOPED) ---------- */
 const getInventory = async (req, res) => {
   try {
-    const inventory = await inventorySchema.find();
+    const inventory = await inventorySchema.find({
+      userId: req.userId, // 👈 ONLY CURRENT USER DATA
+    });
+
     return res.status(200).json(inventory);
   } catch (error) {
     console.error("getInventory error:", error);
@@ -11,7 +14,7 @@ const getInventory = async (req, res) => {
   }
 };
 
-/* ---------- ADD INVENTORY ---------- */
+/* ---------- ADD INVENTORY (USER-SCOPED) ---------- */
 const addInventory = async (req, res) => {
   try {
     const {
@@ -36,6 +39,7 @@ const addInventory = async (req, res) => {
       category,
       productImage,
       expiryDate,
+      userId: req.userId, // 🔥 ATTACH USER
     });
 
     return res.status(201).json(newItem);
@@ -45,7 +49,7 @@ const addInventory = async (req, res) => {
   }
 };
 
-/* ---------- EDIT INVENTORY (🔥 FIXED) ---------- */
+/* ---------- EDIT INVENTORY (USER-SAFE) ---------- */
 const editInventory = async (req, res) => {
   try {
     const { id } = req.params;
@@ -54,20 +58,21 @@ const editInventory = async (req, res) => {
       return res.status(400).json({ message: "Missing item id" });
     }
 
-    const updatedItem = await inventorySchema.findByIdAndUpdate(
-      id,
+    const updatedItem = await inventorySchema.findOneAndUpdate(
+      { _id: id, userId: req.userId }, // 🔥 CHECK OWNER
       req.body,
       {
-        new: true,           // ✅ return updated document
-        runValidators: true // ✅ validate schema
+        new: true,
+        runValidators: true,
       }
     );
 
     if (!updatedItem) {
-      return res.status(404).json({ message: "Item not found" });
+      return res
+        .status(404)
+        .json({ message: "Item not found or unauthorized" });
     }
 
-    // 🔥 IMPORTANT: return ONLY the updated product
     return res.status(200).json(updatedItem);
   } catch (error) {
     console.error("editInventory error:", error);
@@ -75,15 +80,20 @@ const editInventory = async (req, res) => {
   }
 };
 
-/* ---------- DELETE INVENTORY ---------- */
+/* ---------- DELETE INVENTORY (USER-SAFE) ---------- */
 const deleteInventory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const deletedItem = await inventorySchema.findByIdAndDelete(id);
+    const deletedItem = await inventorySchema.findOneAndDelete({
+      _id: id,
+      userId: req.userId, // 🔥 CHECK OWNER
+    });
 
     if (!deletedItem) {
-      return res.status(404).json({ message: "Item not found" });
+      return res
+        .status(404)
+        .json({ message: "Item not found or unauthorized" });
     }
 
     return res.status(200).json({

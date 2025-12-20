@@ -24,6 +24,11 @@ const itemSchema = mongoose.Schema({
     type: Date,
     required: true,
   },
+  userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
 },{timestamps : true})
 
 const inventorySchema = mongoose.model("inventory",itemSchema,"inventory");

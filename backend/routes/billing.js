@@ -1,8 +1,9 @@
 import express from "express";
 import createBilling from "../controller/billing.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createBilling);
+router.post("/", authMiddleware, createBilling);
 
 export default router;

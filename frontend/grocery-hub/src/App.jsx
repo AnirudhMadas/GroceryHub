@@ -9,6 +9,7 @@ import Billing from "./pages/Billing";
 import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Auth from "./pages/Auth";
+import OAuthSuccess from "./pages/OAuthSuccess"; // ✅ ADD THIS
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { productLoader } from "./loaders/productLoader";
@@ -77,9 +78,15 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+
       {
         path: "auth",
         element: <Auth />,
+      },
+
+      {
+        path: "oauth-success", // ✅ FIXED (no slash)
+        element: <OAuthSuccess />,
       },
     ],
   },

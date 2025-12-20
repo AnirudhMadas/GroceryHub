@@ -1,15 +1,17 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import "../styles/Navbar.css";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/auth", { replace: true }); // 🔥 KEY FIX
+    navigate("/auth", { replace: true });
   };
 
   return (
@@ -32,7 +34,13 @@ const Navbar = () => {
           </>
         )}
 
-        {/* AUTH SECTION */}
+        {/* 🌙 THEME TOGGLE */}
+        <li>
+          <button className="theme-btn" onClick={toggleTheme}>
+            {theme === "dark" ? "🌙 Dark" : "☀️ Light"}
+          </button>
+        </li>
+
         {user ? (
           <li>
             <button className="login-btn" onClick={handleLogout}>

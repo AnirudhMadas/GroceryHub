@@ -1,3 +1,6 @@
+/* =========================
+   AUTH PAGE WRAPPER
+========================= */
 .auth-wrapper {
   min-height: calc(100vh - 72px);
   display: flex;
@@ -6,6 +9,9 @@
   background: #e8f5e9;
 }
 
+/* =========================
+   AUTH CARD
+========================= */
 .auth-card {
   display: flex;
   width: 900px;
@@ -15,7 +21,9 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-/* LEFT PANEL */
+/* =========================
+   LEFT PANEL
+========================= */
 .auth-left {
   width: 45%;
   background: linear-gradient(135deg, #4caf50, #2e7d32);
@@ -37,18 +45,63 @@
   margin-bottom: 30px;
 }
 
-.switch-btn {
-  background: #ffffff;
-  color: #2e7d32;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-weight: 600;
-  cursor: pointer;
-  width: fit-content;
+/* =========================
+   ACTION BUTTON ROW
+========================= */
+.auth-actions {
+  display: flex;
+  gap: 14px;
 }
 
-/* RIGHT PANEL */
+/* Sign Up button */
+.signup-btn {
+  flex: 1;
+  background: #ffffff;
+  color: #16a34a;
+  border: none;
+  padding: 12px 0;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.signup-btn:hover {
+  background: #f0fdf4;
+}
+
+/* Google button */
+.google-btn {
+  flex: 1;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+  padding: 12px 0;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.google-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.google-btn:hover {
+  background: #f9fafb;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
 .auth-right {
   width: 55%;
   padding: 50px;
@@ -60,6 +113,7 @@
   color: #2e7d32;
 }
 
+/* Form */
 .auth-right form {
   display: flex;
   flex-direction: column;
@@ -78,6 +132,7 @@
   border-color: #4caf50;
 }
 
+/* Submit button */
 .auth-submit {
   margin-top: 10px;
   background: #4caf50;
@@ -89,6 +144,7 @@
   cursor: pointer;
 }
 
+/* Toggle text */
 .toggle-text {
   margin-top: 18px;
   font-size: 14px;
@@ -100,7 +156,9 @@
   font-weight: 600;
 }
 
-/* RESPONSIVE */
+/* =========================
+   RESPONSIVE
+========================= */
 @media (max-width: 900px) {
   .auth-card {
     flex-direction: column;
@@ -110,5 +168,9 @@
   .auth-left,
   .auth-right {
     width: 100%;
+  }
+
+  .auth-actions {
+    flex-direction: column;
   }
 }

@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import "../styles/Reports.css";
-import axios from "axios";
+import authAxios from "../utils/authAxios";
 
 ChartJS.register(
   CategoryScale,
@@ -27,16 +27,19 @@ const Reports = () => {
   const [toDate, setToDate] = useState("");
   const [sales, setSales] = useState([]);
 
+  /* ---------- FETCH REPORTS ---------- */
+  const fetchReports = async (params = {}) => {
+    try {
+      const res = await authAxios.get("/api/reports", { params });
+      setSales(res.data);
+    } catch (err) {
+      console.error("REPORT FETCH ERROR:", err);
+    }
+  };
+
   useEffect(() => {
     fetchReports();
   }, []);
-
-  const fetchReports = async (params = {}) => {
-    const res = await axios.get("http://localhost:5000/api/reports", {
-      params,
-    });
-    setSales(res.data);
-  };
 
   const applyFilters = () => {
     fetchReports({
@@ -53,60 +56,60 @@ const Reports = () => {
     fetchReports();
   };
 
+  /* ---------- METRICS ---------- */
   const totalRevenue = sales.reduce((s, i) => s + i.total, 0);
-  const totalProducts = sales.reduce((s, i) => s + i.quantity, 0);
+  const totalProductsSold = sales.reduce((s, i) => s + i.quantity, 0);
   const uniqueProducts = new Set(sales.map((s) => s.productName)).size;
 
+  /* ---------- PRODUCT SALES MAP ---------- */
+  const productSales = sales.reduce((acc, item) => {
+    acc[item.productName] = acc[item.productName] || {
+      quantity: 0,
+      revenue: 0,
+    };
+    acc[item.productName].quantity += item.quantity;
+    acc[item.productName].revenue += item.total;
+    return acc;
+  }, {});
+
   /* ---------- LEAST SOLD PRODUCTS ---------- */
-const productSalesCount = sales.reduce((acc, s) => {
-  acc[s.productName] = (acc[s.productName] || 0) + s.quantity;
-  return acc;
-}, {});
-
-const leastSoldProducts = Object.entries(productSalesCount)
-  .sort((a, b) => a[1] - b[1]) // ascending = least sold first
-  .slice(0, 3); // bottom 3
-
+  const leastSoldProducts = Object.entries(productSales)
+    .sort((a, b) => a[1].quantity - b[1].quantity)
+    .slice(0, 3); // bottom 3
 
   /* ---------- BAR CHART ---------- */
   const barData = {
-    labels: ["Current Period"],
+    labels: ["Sales Overview"],
     datasets: [
       {
         label: "Revenue (₹)",
         data: [totalRevenue],
-        backgroundColor: "#2e7d32",
-        borderRadius: 8,
+        backgroundColor: "#22c55e",
+        borderRadius: 10,
       },
       {
         label: "Units Sold",
-        data: [totalProducts],
-        backgroundColor: "#ff9800",
-        borderRadius: 8,
+        data: [totalProductsSold],
+        backgroundColor: "#f59e0b",
+        borderRadius: 10,
       },
     ],
   };
 
   /* ---------- PIE CHART ---------- */
-  const productRevenue = sales.reduce((acc, s) => {
-    acc[s.productName] = (acc[s.productName] || 0) + s.total;
-    return acc;
-  }, {});
-
-  const pieChartData = {
-    labels: Object.keys(productRevenue),
+  const pieData = {
+    labels: Object.keys(productSales),
     datasets: [
       {
-        data: Object.values(productRevenue),
+        data: Object.values(productSales).map((p) => p.revenue),
         backgroundColor: [
-          "#1976d2",
-          "#43a047",
-          "#fb8c00",
-          "#e53935",
-          "#8e24aa",
-          "#00897b",
+          "#22c55e",
+          "#16a34a",
+          "#f59e0b",
+          "#ef4444",
+          "#6366f1",
+          "#0ea5e9",
         ],
-        borderWidth: 1,
       },
     ],
   };
@@ -116,17 +119,9 @@ const leastSoldProducts = Object.entries(productSalesCount)
     plugins: {
       legend: {
         labels: {
-          color: "#333",
-          font: { size: 14 },
+          color: "#374151",
+          font: { size: 13 },
         },
-      },
-    },
-    scales: {
-      x: {
-        ticks: { color: "#333" },
-      },
-      y: {
-        ticks: { color: "#333" },
       },
     },
   };
@@ -136,7 +131,7 @@ const leastSoldProducts = Object.entries(productSalesCount)
       <div className="reports-card">
         <h2>Sales Reports</h2>
 
-        {/* Filters */}
+        {/* FILTERS */}
         <div className="filters">
           <input
             type="text"
@@ -156,6 +151,7 @@ const leastSoldProducts = Object.entries(productSalesCount)
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
             />
+
             <button className="primary-btn" onClick={applyFilters}>
               Apply
             </button>
@@ -165,15 +161,15 @@ const leastSoldProducts = Object.entries(productSalesCount)
           </div>
         </div>
 
-        {/* Table */}
+        {/* TABLE */}
         <table className="report-table">
           <thead>
             <tr>
               <th>Date</th>
               <th>Product</th>
               <th>Qty</th>
-              <th>Price (₹)</th>
-              <th>Total (₹)</th>
+              <th>Price</th>
+              <th>Total</th>
             </tr>
           </thead>
           <tbody>
@@ -200,24 +196,10 @@ const leastSoldProducts = Object.entries(productSalesCount)
                 </tr>
               ))
             )}
-
-            {sales.length > 0 && (
-              <tr className="total-row">
-                <td>-</td>
-                <td>
-                  <strong>TOTAL SALES</strong>
-                </td>
-                <td>-</td>
-                <td>-</td>
-                <td>
-                  <strong>₹{totalRevenue}</strong>
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
 
-        {/* Summary */}
+        {/* SUMMARY */}
         <div className="summary">
           <div className="summary-box">
             <span>Total Revenue</span>
@@ -225,7 +207,7 @@ const leastSoldProducts = Object.entries(productSalesCount)
           </div>
           <div className="summary-box">
             <span>Products Sold</span>
-            <h3>{totalProducts}</h3>
+            <h3>{totalProductsSold}</h3>
           </div>
           <div className="summary-box">
             <span>Unique Products</span>
@@ -233,42 +215,41 @@ const leastSoldProducts = Object.entries(productSalesCount)
           </div>
         </div>
 
-        {/* Least Sold Products Insight */}
-<h3 className="section-title warning-title">
-  Least Sold Products (Avoid Restocking)
-</h3>
+        {/* LEAST SOLD */}
+        <h3 className="section-title warning-title">
+          Least Sold Products (Avoid Restocking)
+        </h3>
 
-<div className="least-sold">
-  {leastSoldProducts.length === 0 ? (
-    <p className="no-data">Not enough data to analyze</p>
-  ) : (
-    leastSoldProducts.map(([product, qty]) => (
-      <div key={product} className="least-card">
-        <h4>{product}</h4>
-        <p>
-          Units Sold: <strong>{qty}</strong>
-        </p>
-        <span className="warning-text">
-          ⚠ Low demand – consider reducing stock or offering discounts
-        </span>
-      </div>
-    ))
-  )}
-</div>
+        <div className="least-sold">
+          {leastSoldProducts.length === 0 ? (
+            <p className="no-data">Not enough data</p>
+          ) : (
+            leastSoldProducts.map(([name, data]) => (
+              <div key={name} className="least-card">
+                <h4>{name}</h4>
+                <p>
+                  Units Sold: <strong>{data.quantity}</strong>
+                </p>
+                <span className="warning-text">
+                  ⚠ Low demand – avoid overstocking
+                </span>
+              </div>
+            ))
+          )}
+        </div>
 
-
-        {/* Charts */}
+        {/* CHARTS */}
         <h3 className="section-title">Sales Overview</h3>
 
         <div className="charts">
           <div className="chart-box">
-            <h4>Sales Summary</h4>
+            <h4>Revenue vs Units Sold</h4>
             <Bar data={barData} options={chartOptions} />
           </div>
 
           <div className="chart-box">
-            <h4>Top Products by Revenue</h4>
-            <Pie data={pieChartData} options={chartOptions} />
+            <h4>Revenue by Product</h4>
+            <Pie data={pieData} options={chartOptions} />
           </div>
         </div>
       </div>

@@ -37,10 +37,13 @@ const Auth = () => {
     }
   };
 
+  const googleLogin = () => {
+    window.location.href = "http://localhost:5000/api/auth/google";
+  };
+
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-
         {/* LEFT PANEL */}
         <div className="auth-left">
           <h2>{isLogin ? "Welcome Back" : "Join GroceryHub"}</h2>
@@ -50,12 +53,19 @@ const Auth = () => {
               : "Create an account and start managing your store"}
           </p>
 
-          <button
-            className="switch-btn"
-            onClick={() => setIsLogin(!isLogin)}
-          >
+          <div className="auth-actions">
+            <button className="switch-btn" onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Sign Up" : "Login"}
           </button>
+
+          <button type="button" className="google-btn" onClick={googleLogin}>
+            <img
+              src="https://developers.google.com/identity/images/g-logo.png"
+              alt="Google"
+            />
+            Sign in with Google
+          </button>
+          </div>
         </div>
 
         {/* RIGHT PANEL */}
@@ -93,7 +103,6 @@ const Auth = () => {
             </span>
           </p>
         </div>
-
       </div>
     </div>
   );
