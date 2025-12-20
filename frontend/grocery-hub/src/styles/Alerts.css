@@ -1,0 +1,86 @@
+.alerts-page {
+  background: #f5f7fa;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.alerts-card {
+  max-width: 900px;
+  margin: auto;
+  background: #6fd49c;
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.alerts-card h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+.tabs {
+  display: flex;
+  gap: 30px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.tabs .active {
+  border-bottom: 3px solid green;
+  font-weight: bold;
+}
+
+.alert-item {
+  background: #fff;
+  border: 1px solid green;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.badge.low {
+  background: orange;
+  color: white;
+}
+
+.badge.out {
+  background: red;
+  color: white;
+}
+
+.reorder-btn {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.empty {
+  text-align: center;
+  padding: 30px;
+  font-weight: bold;
+}

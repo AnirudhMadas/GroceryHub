@@ -19,7 +19,11 @@ const itemSchema = mongoose.Schema({
     },
     productImage:{
         type:String,
-    }
+    },
+    expiryDate: {
+    type: Date,
+    required: true,
+  },
 },{timestamps : true})
 
 const inventorySchema = mongoose.model("inventory",itemSchema,"inventory");

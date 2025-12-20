@@ -79,3 +79,46 @@
   background: #c62828;
   color: white;
 }
+
+
+/* ---------- EXPIRY BADGES ---------- */
+.expiry-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 6px;
+  display: inline-block;
+}
+
+.expiry-badge.safe {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.expiry-badge.near {
+  background: #fff3e0;
+  color: #ef6c00;
+}
+
+.expiry-badge.expired {
+  background: #ffebee;
+  color: #c62828;
+}
+
+/* BADGE CONTAINER */
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+/* Ensure badges behave normally */
+.category-badge,
+.stock-badge,
+.expiry-badge {
+  position: static; /* 🚨 IMPORTANT */
+  white-space: nowrap;
+}
+

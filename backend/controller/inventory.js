@@ -14,21 +14,28 @@ const getInventory = async (req, res) => {
 /* ---------- ADD INVENTORY ---------- */
 const addInventory = async (req, res) => {
   try {
-    const body = req.body || {};
-    const { productName, quantity, price, category, productImage } = body;
-
-    if (!productName) {
-      return res.status(400).json({
-        message: "Product Name should not be empty",
-      });
-    }
-
-    const newItem = await inventorySchema.create({
+    const {
       productName,
       quantity,
       price,
       category,
       productImage,
+      expiryDate,
+    } = req.body;
+
+    if (!productName || price === undefined) {
+      return res.status(400).json({
+        message: "Product name and price are required",
+      });
+    }
+
+    const newItem = await inventorySchema.create({
+      productName,
+      quantity: Number(quantity) || 0,
+      price: Number(price),
+      category,
+      productImage,
+      expiryDate,
     });
 
     return res.status(201).json(newItem);
@@ -38,31 +45,33 @@ const addInventory = async (req, res) => {
   }
 };
 
-/* ---------- EDIT INVENTORY ---------- */
+/* ---------- EDIT INVENTORY (🔥 FIXED) ---------- */
 const editInventory = async (req, res) => {
   try {
     const { id } = req.params;
+
     if (!id) {
-      return res.status(400).json({ error: "Missing item id" });
+      return res.status(400).json({ message: "Missing item id" });
     }
 
     const updatedItem = await inventorySchema.findByIdAndUpdate(
       id,
       req.body,
-      { new: true }
+      {
+        new: true,           // ✅ return updated document
+        runValidators: true // ✅ validate schema
+      }
     );
 
     if (!updatedItem) {
-      return res.status(404).json({ error: "Item not found" });
+      return res.status(404).json({ message: "Item not found" });
     }
 
-    return res.json({
-      message: "Item updated",
-      item: updatedItem,
-    });
-  } catch (err) {
-    console.error("editInventory error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    // 🔥 IMPORTANT: return ONLY the updated product
+    return res.status(200).json(updatedItem);
+  } catch (error) {
+    console.error("editInventory error:", error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -71,12 +80,25 @@ const deleteInventory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await inventorySchema.findByIdAndDelete(id);
+    const deletedItem = await inventorySchema.findByIdAndDelete(id);
 
-    return res.json({ message: "Item deleted" });
+    if (!deletedItem) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+
+    return res.status(200).json({
+      message: "Item deleted",
+      id: deletedItem._id,
+    });
   } catch (error) {
+    console.error("deleteInventory error:", error);
     return res.status(500).json({ message: error.message });
   }
 };
 
-export { getInventory, addInventory, editInventory, deleteInventory };
+export {
+  getInventory,
+  addInventory,
+  editInventory,
+  deleteInventory,
+};

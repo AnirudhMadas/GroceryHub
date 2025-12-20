@@ -8,7 +8,6 @@ import Inventory from "./pages/Inventory";
 import Billing from "./pages/Billing";
 import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
-import Feedback from "./pages/Feedback";
 import Auth from "./pages/Auth";
 
 import ProtectedRoute from "./components/ProtectedRoute";

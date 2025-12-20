@@ -1,0 +1,188 @@
+.reports-page {
+  padding: 30px;
+  background: #f4f6f8;
+}
+
+/* MAIN CARD */
+.reports-card {
+  background: linear-gradient(135deg, #66bb6a, #43a047);
+  padding: 30px;
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.reports-card h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+/* FILTERS */
+.filters input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 15px;
+}
+
+.date-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.date-filters input {
+  flex: 1;
+}
+
+.primary-btn {
+  background: #1b5e20;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.secondary-btn {
+  background: #2e7d32;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* TABLE */
+.report-table {
+  width: 100%;
+  margin-top: 25px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.report-table th,
+.report-table td {
+  padding: 14px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.report-table th {
+  background: #f1f8e9;
+  font-weight: 600;
+}
+
+.time {
+  font-size: 12px;
+  color: #666;
+}
+
+.total-row {
+  background: #f9fbe7;
+}
+
+/* SUMMARY */
+.summary {
+  margin-top: 25px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.summary-box {
+  flex: 1;
+  min-width: 180px;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.summary-box span {
+  font-size: 14px;
+  color: #555;
+}
+
+.summary-box h3 {
+  margin-top: 6px;
+  color: #1b5e20;
+}
+
+/* CHARTS */
+.section-title {
+  margin-top: 40px;
+  color: #1b5e20;
+  text-align: center;
+}
+
+.charts {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.chart-box {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+.chart-box h4 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #2e7d32;
+}
+
+
+/* LEAST SOLD PRODUCTS */
+.warning-title {
+  color: #c62828;
+}
+
+.least-sold {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.least-card {
+  background: #fff3e0;
+  border-left: 6px solid #e53935;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.least-card h4 {
+  margin-bottom: 6px;
+  color: #bf360c;
+}
+
+.warning-text {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  color: #d84315;
+}
+
+.no-data {
+  color: #555;
+  text-align: center;
+}
+
+
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .charts {
+    grid-template-columns: 1fr;
+  }
+}

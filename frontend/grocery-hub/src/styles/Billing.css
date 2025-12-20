@@ -303,6 +303,24 @@
 }
 
 
+/* EXPIRED PRODUCT IN BILLING */
+.suggestion-item.expired {
+  opacity: 0.5;
+  pointer-events: none;
+  background: #ffebee;
+}
+
+.expiry-label {
+  background: #c62828;
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
+
+
 /* Mobile */
 @media (max-width: 640px) {
   .cart-item {

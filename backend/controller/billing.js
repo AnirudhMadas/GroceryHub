@@ -1,15 +1,20 @@
 import Inventory from "../models/item.js";
-import Invoice from "../models/invoice.js";
+import Billing from "../models/billing.js";
 
-export const createInvoice = async (req, res) => {
+const createBilling = async (req, res) => {
   try {
-    const { items } = req.body;
+    const items = req.body;
 
-    let grandTotal = 0;
+    if (!Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "Invalid billing data" });
+    }
 
-    // Update inventory
-    for (let item of items) {
-      const product = await Inventory.findById(item.productId);
+    const billingDocs = [];
+
+    for (const item of items) {
+      const product = await Inventory.findOne({
+        productName: item.productName,
+      });
 
       if (!product || product.quantity < item.quantity) {
         return res
@@ -20,25 +25,21 @@ export const createInvoice = async (req, res) => {
       product.quantity -= item.quantity;
       await product.save();
 
-      grandTotal += item.price * item.quantity;
+      billingDocs.push({
+        productName: item.productName,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.total,
+      });
     }
 
-    const invoice = await Invoice.create({
-      items,
-      grandTotal,
-    });
+    await Billing.insertMany(billingDocs);
 
-    res.status(201).json(invoice);
+    res.status(201).json({ message: "Billing saved successfully" });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error("BILLING ERROR:", err);
+    res.status(500).json({ message: "Billing failed" });
   }
 };
 
-export const getInvoices = async (req, res) => {
-  try {
-    const invoices = await Invoice.find().sort({ createdAt: -1 });
-    res.json(invoices);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
+export default createBilling;
