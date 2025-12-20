@@ -7,6 +7,11 @@ const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    logout();
+    navigate("/auth", { replace: true }); // 🔥 KEY FIX
+  };
+
   return (
     <nav className="navbar">
       <div className="logo">
@@ -14,7 +19,9 @@ const Navbar = () => {
       </div>
 
       <ul className="nav-links">
-        <li><NavLink to="/" end>Home</NavLink></li>
+        <li>
+          <NavLink to="/" end>Home</NavLink>
+        </li>
 
         {user && (
           <>
@@ -25,17 +32,13 @@ const Navbar = () => {
           </>
         )}
 
-
-
         {/* AUTH SECTION */}
         {user ? (
-          <>
-            <li>
-              <button className="login-btn" onClick={logout}>
-                Logout
-              </button>
-            </li>
-          </>
+          <li>
+            <button className="login-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </li>
         ) : (
           <li>
             <button
