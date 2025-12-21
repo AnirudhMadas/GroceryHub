@@ -1,7 +1,9 @@
 import axios from "axios";
+import "dotenv/config";
 
 const authAxios = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: import.meta.env.VITE_API_URL,
+  withCredentials: true,
 });
 
 authAxios.interceptors.request.use((config) => {

@@ -22,8 +22,8 @@ const addInventory = async (req, res) => {
       quantity,
       price,
       category,
-      productImage,
       expiryDate,
+      productImage,
     } = req.body;
 
     if (!productName || price === undefined) {

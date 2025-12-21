@@ -5,22 +5,32 @@ export const getReports = async (req, res) => {
   try {
     const { search, from, to } = req.query;
 
-    // 🔥 START WITH USER FILTER
+    // 🔐 USER FILTER
     const query = {
       userId: req.userId,
     };
 
     // 🔎 PRODUCT SEARCH
     if (search) {
-      query.productName = { $regex: search, $options: "i" };
+      query.productName = {
+        $regex: search,
+        $options: "i",
+      };
     }
 
-    // 📅 DATE RANGE FILTER (USING createdAt)
-    if (from && to) {
-      query.createdAt = {
-        $gte: new Date(from),
-        $lte: new Date(to),
-      };
+    // 📅 DATE RANGE FILTER (ROBUST)
+    if (from || to) {
+      query.createdAt = {};
+
+      if (from) {
+        query.createdAt.$gte = new Date(from);
+      }
+
+      if (to) {
+        const endOfDay = new Date(to);
+        endOfDay.setHours(23, 59, 59, 999); // 🔥 INCLUDE FULL DAY
+        query.createdAt.$lte = endOfDay;
+      }
     }
 
     const reports = await Billing.find(query).sort({

@@ -1,11 +1,17 @@
 import express from "express";
-import {getInventory,addInventory,editInventory,deleteInventory} from "../controller/inventory.js";
+import auth from "../middleware/authMiddleware.js";
+import {
+  getInventory,
+  addInventory,
+  editInventory,
+  deleteInventory,
+} from "../controller/inventory.js";
 
 const router = express.Router();
 
-router.get("/",getInventory);
-router.post("/",addInventory);
-router.put("/:id",editInventory);
-router.delete("/:id",deleteInventory);
+router.get("/", auth, getInventory);
+router.post("/", auth, addInventory);
+router.put("/:id", auth, editInventory);
+router.delete("/:id", auth, deleteInventory);
 
 export default router;
