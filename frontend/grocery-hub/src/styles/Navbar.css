@@ -40,7 +40,7 @@
 
 .nav-links li a.active {
   background: var(--primary);
-  color: #ffffff;
+  color: #0b0b0b;
 }
 
 /* THEME TOGGLE */
@@ -57,7 +57,7 @@
 /* LOGIN BUTTON */
 .login-btn {
   background: var(--primary);
-  color: white;
+  color: rgb(8, 8, 8);
   border: none;
   padding: 8px 18px;
   border-radius: 999px;
@@ -96,13 +96,4 @@
 .nav-links a.active {
   background: var(--primary);
   color: white;
-}
-
-.theme-btn {
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 6px 14px;
-  border-radius: 999px;
-  color: var(--text);
-  cursor: pointer;
 }

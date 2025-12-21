@@ -1,7 +1,6 @@
 import React from "react";
 import { useLoaderData } from "react-router-dom";
 import "../styles/Home.css";
-import Products from "../components/Products";
 
 const Home = () => {
   // ✅ Get data returned by loader

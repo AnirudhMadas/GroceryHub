@@ -1,7 +1,6 @@
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import Inventory from "./pages/Inventory";
@@ -9,10 +8,11 @@ import Billing from "./pages/Billing";
 import Reports from "./pages/Reports";
 import Alerts from "./pages/Alerts";
 import Auth from "./pages/Auth";
-import OAuthSuccess from "./pages/OAuthSuccess"; // ✅ ADD THIS
+import OAuthSuccess from "./pages/OAuthSuccess";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { productLoader } from "./loaders/productLoader";
+
 
 /* ---------- LAYOUT ---------- */
 const Layout = () => {

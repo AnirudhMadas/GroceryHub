@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import "../styles/Billing.css";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import authAxios from "../utils/authAxios";
 
 const GST_RATE = 0.05;
