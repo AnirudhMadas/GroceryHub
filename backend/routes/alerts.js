@@ -3,7 +3,7 @@ import {
   getLowStockAlerts,
   getOutOfStockAlerts,
   reorderItem,
-} from "../controller/alerts.js";
+} from "../controllers/alerts.js";
 
 import authMiddleware from "../middleware/authMiddleware.js";
 

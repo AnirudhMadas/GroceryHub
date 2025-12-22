@@ -5,7 +5,7 @@ import {
   addInventory,
   editInventory,
   deleteInventory,
-} from "../controller/inventory.js";
+} from "../controllers/inventory.js";
 
 const router = express.Router();
 

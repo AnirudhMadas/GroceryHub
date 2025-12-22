@@ -1,5 +1,5 @@
 import express from "express";
-import createBilling from "../controller/billing.js";
+import createBilling from "../controllers/billing.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
