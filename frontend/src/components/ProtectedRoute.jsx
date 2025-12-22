@@ -1,14 +1,12 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+import { Navigate } from "react-router-dom";
+
 const ProtectedRoute = ({ children }) => {
-  const { user, authLoading } = useAuth();
+  const token = localStorage.getItem("token");
 
-  if (authLoading) {
-    return <div>Loading...</div>; // or spinner
-  }
-
-  if (!user) {
+  if (!token) {
     return <Navigate to="/auth" replace />;
   }
 
@@ -16,3 +14,4 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default ProtectedRoute;
+
