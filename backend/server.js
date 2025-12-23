@@ -22,15 +22,14 @@ connectDb();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:5173",
-      "https://groceryhub.vercel.app", // 🔁 CHANGE to your real Vercel URL
-    ],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://your-frontend-name.vercel.app"
+  ],
+  credentials: true
+}));
+
 
 app.use(passport.initialize());
 
