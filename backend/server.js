@@ -25,10 +25,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://your-frontend-name.vercel.app"
+    process.env.FRONTEND_URL
   ],
   credentials: true
 }));
+
 
 
 app.use(passport.initialize());
