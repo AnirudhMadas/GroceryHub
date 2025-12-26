@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import authAxios from "../utils/authAxios";
 import "../styles/Auth.css";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "https://groceryhub-7q1l.onrender.com";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
