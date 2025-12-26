@@ -1,8 +1,10 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import authAxios from "../utils/authAxios";
 import "../styles/Auth.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,18 +21,14 @@ const Auth = () => {
 
     try {
       const url = isLogin
-        ? "http://localhost:5000/api/auth/login"
-        : "http://localhost:5000/api/auth/signup";
+        ? `${API_URL}/api/auth/login`
+        : `${API_URL}/api/auth/signup`;
 
-      const res = await axios.post(url, {
-        email,
-        password,
-      });
+      const res = await authAxios.post(url, { email, password });
 
-      // Save user in context
-      login({ email: res.data.email });
+      localStorage.setItem("token", res.data.token);
+      login(res.data.user);
 
-      // Redirect after auth
       navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Authentication failed");
@@ -38,44 +36,28 @@ const Auth = () => {
   };
 
   const googleLogin = () => {
-    window.location.href = "http://localhost:5000/api/auth/google";
+    window.location.href = `${API_URL}/api/auth/google`;
   };
 
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-        {/* LEFT PANEL */}
         <div className="auth-left">
           <h2>{isLogin ? "Welcome Back" : "Join GroceryHub"}</h2>
-          <p>
-            {isLogin
-              ? "Login securely to manage your grocery store"
-              : "Create an account and start managing your store"}
-          </p>
 
-          <div className="auth-actions">
-            <button className="switch-btn" onClick={() => setIsLogin(!isLogin)}>
+          <button onClick={() => setIsLogin(!isLogin)}>
             {isLogin ? "Sign Up" : "Login"}
           </button>
 
-          <button type="button" className="google-btn" onClick={googleLogin}>
-            <img
-              src="https://developers.google.com/identity/images/g-logo.png"
-              alt="Google"
-            />
+          <button onClick={googleLogin}>
             Sign in with Google
           </button>
-          </div>
         </div>
 
-        {/* RIGHT PANEL */}
         <div className="auth-right">
-          <h3>{isLogin ? "Login" : "Sign Up"}</h3>
-
           <form onSubmit={handleSubmit}>
             <input
               type="email"
-              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -83,7 +65,6 @@ const Auth = () => {
 
             <input
               type="password"
-              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -91,17 +72,10 @@ const Auth = () => {
 
             {error && <p style={{ color: "red" }}>{error}</p>}
 
-            <button type="submit" className="auth-submit">
+            <button type="submit">
               {isLogin ? "Login" : "Create Account"}
             </button>
           </form>
-
-          <p className="toggle-text">
-            {isLogin ? "Don’t have an account?" : "Already have an account?"}
-            <span onClick={() => setIsLogin(!isLogin)}>
-              {isLogin ? " Sign Up" : " Login"}
-            </span>
-          </p>
         </div>
       </div>
     </div>
