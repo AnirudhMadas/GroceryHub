@@ -31,10 +31,7 @@ router.get(
       { expiresIn: "7d" }
     );
 
-    const FRONTEND_URL =
-      process.env.NODE_ENV === "production"
-        ? "https://groceryhub.vercel.app" // 🔁 CHANGE to your real Vercel URL
-        : "http://localhost:5173";
+    const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
     res.redirect(
       `${FRONTEND_URL}/oauth-success?token=${token}&email=${req.user.email}`
