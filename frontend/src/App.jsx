@@ -85,7 +85,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "oauth-success", // ✅ FIXED (no slash)
+        path: "oauth-success",
         element: <OAuthSuccess />,
       },
     ],
