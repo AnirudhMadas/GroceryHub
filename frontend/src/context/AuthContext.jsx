@@ -4,33 +4,33 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [authLoading, setAuthLoading] = useState(true); // 🔥 KEY FIX
+  const [authLoading, setAuthLoading] = useState(true);
 
-  // Hydrate auth from localStorage
+  // 🔥 Hydrate auth on app load
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    if (token && email) {
+      setUser({ email });
     }
 
-    setAuthLoading(false); // 🔥 IMPORTANT
+    setAuthLoading(false);
   }, []);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+  const login = ({ email }) => {
+    setUser({ email });
+    localStorage.setItem("email", email);
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, login, logout, authLoading }}
-    >
+    <AuthContext.Provider value={{ user, login, logout, authLoading }}>
       {children}
     </AuthContext.Provider>
   );
