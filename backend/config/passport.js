@@ -1,18 +1,13 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import User from "../models/user.js"; // ✅ lowercase
-
-const GOOGLE_CALLBACK_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://groceryhub-backend.onrender.com/api/auth/google/callback"
-    : "http://localhost:5000/api/auth/google/callback";
+import User from "../models/user.js";
 
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: GOOGLE_CALLBACK_URL,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL, // ✅ ONLY env var
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
