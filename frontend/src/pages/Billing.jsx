@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../styles/Billing.css";
-import authAxios from "../utils/authAxios";
+import axiosInstance from "../utils/axiosInstance";
 
 const GST_RATE = 0.05;
 
@@ -13,7 +13,7 @@ const Billing = () => {
 
   /* ---------- FETCH INVENTORY ---------- */
   useEffect(() => {
-    authAxios
+    axiosInstance
       .get("/api/inventory")
       .then((res) => setProducts(res.data))
       .catch((err) => console.error(err));
@@ -110,7 +110,7 @@ const Billing = () => {
   /* ---------- GENERATE INVOICE ---------- */
   const generateInvoice = async () => {
     try {
-      await authAxios.post(
+      await axiosInstance.post(
         "/api/billing",
         cart.map((i) => ({
           productName: i.productName,

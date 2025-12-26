@@ -2,7 +2,7 @@ import { useLoaderData } from "react-router-dom";
 import { useState, useEffect } from "react";
 import ProductCard from "../components/ProductCard";
 import "../styles/Inventory.css";
-import authAxios from "../utils/authAxios";
+import axiosInstance from "../utils/axiosInstance";
 
 
 const Inventory = () => {
@@ -111,7 +111,7 @@ const Inventory = () => {
 
     if (isEditing && editId) {
       // 🔐 EDIT INVENTORY (JWT INCLUDED)
-      res = await authAxios.put(
+      res = await axiosInstance.put(
         `/api/inventory/${editId}`,
         payload
       );
@@ -121,7 +121,7 @@ const Inventory = () => {
       );
     } else {
       // 🔐 ADD INVENTORY (JWT INCLUDED)
-      res = await authAxios.post(
+      res = await axiosInstance.post(
         "/api/inventory",
         payload
       );
@@ -167,7 +167,7 @@ const Inventory = () => {
   if (!window.confirm("Delete this product?")) return;
 
   try {
-    await authAxios.delete(`/api/inventory/${id}`);
+    await axiosInstance.delete(`/api/inventory/${id}`);
 
     setProducts((prev) =>
       prev.filter((p) => p._id !== id)

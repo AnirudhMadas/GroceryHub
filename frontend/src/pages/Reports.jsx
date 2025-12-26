@@ -10,7 +10,7 @@ import {
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import "../styles/Reports.css";
-import authAxios from "../utils/authAxios";
+import axiosInstance from "../utils/axiosInstance";
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +30,7 @@ const Reports = () => {
   /* ---------- FETCH REPORTS ---------- */
   const fetchReports = async (params = {}) => {
     try {
-      const res = await authAxios.get("/api/reports", { params });
+      const res = await axiosInstance.get("/api/reports", { params });
       setSales(res.data);
     } catch (err) {
       console.error("REPORT FETCH ERROR:", err);

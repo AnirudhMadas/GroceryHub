@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import authAxios from "../utils/authAxios";
+import axiosInstance from "../utils/axiosInstance";
 import "../styles/Auth.css";
 
 const API_URL = "https://groceryhub-7q1l.onrender.com";
@@ -24,7 +24,7 @@ const Auth = () => {
         ? `${API_URL}/api/auth/login`
         : `${API_URL}/api/auth/signup`;
 
-      const res = await authAxios.post(url, { email, password });
+      const res = await axiosInstance.post(url, { email, password });
 
       localStorage.setItem("token", res.data.token);
       login(res.data.user);

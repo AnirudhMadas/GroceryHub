@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import authAxios from "../utils/authAxios";
 import "../styles/Alerts.css";
+import axiosInstance from "../utils/axiosInstance";
 
 const LOW_STOCK_LIMIT = 10;
 
@@ -9,7 +9,7 @@ const Alerts = () => {
   const [activeTab, setActiveTab] = useState("out");
 
   useEffect(() => {
-    authAxios.get("/api/inventory").then((res) => setProducts(res.data));
+    axiosInstance.get("/api/inventory").then((res) => setProducts(res.data));
   }, []);
 
   const outOfStock = products.filter((p) => p.quantity === 0);
@@ -21,7 +21,7 @@ const Alerts = () => {
 
   const handleReorder = async (id) => {
     try {
-      const res = await authAxios.post(`/api/alerts/reorder/${id}`);
+      const res = await axiosInstance.post(`/api/alerts/reorder/${id}`);
       const { productName, category } = res.data;
 
       const query = encodeURIComponent(`${productName} ${category || ""}`);
