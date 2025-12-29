@@ -4,23 +4,23 @@ import axiosInstance from "../utils/axiosInstance";
 export const productLoader = async () => {
   const token = localStorage.getItem("token");
 
-  // 🔐 Not logged in → go to auth
   if (!token) {
     return redirect("/auth");
   }
 
   try {
     const res = await axiosInstance.get("/api/inventory");
-    return res.data;
-  } catch (err) {
-    console.error("Inventory loader failed:", err);
 
-    // 🔐 Token expired / invalid
+    // ✅ Ensure array
+    return Array.isArray(res.data) ? res.data : [];
+  } catch (err) {
     if (err.response?.status === 401) {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       return redirect("/auth");
     }
 
-    throw err;
+    console.error("Inventory loader failed:", err);
+    return []; // 🔥 prevents reduce crash
   }
 };

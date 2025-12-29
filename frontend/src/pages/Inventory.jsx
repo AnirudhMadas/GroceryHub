@@ -4,14 +4,13 @@ import ProductCard from "../components/ProductCard";
 import "../styles/Inventory.css";
 import axiosInstance from "../utils/axiosInstance";
 
-
 const Inventory = () => {
   /* ---------- LOADER → STATE SYNC ---------- */
   const loaderProducts = useLoaderData();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    setProducts(loaderProducts || []);
+    setProducts(Array.isArray(loaderProducts) ? loaderProducts : []);
   }, [loaderProducts]);
 
   const LOW_STOCK_LIMIT = 10;
@@ -62,8 +61,7 @@ const Inventory = () => {
         .includes(searchTerm.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === "All" ||
-        item.category === selectedCategory;
+        selectedCategory === "All" || item.category === selectedCategory;
 
       const matchesStock =
         stockFilter === "All" ||
@@ -95,55 +93,45 @@ const Inventory = () => {
 
   /* ---------- ADD / UPDATE ---------- */
   const handleSubmit = async () => {
-  try {
-    if (!formData.productName || !formData.price) {
-      alert("Product name and price are required");
-      return;
+    try {
+      if (!formData.productName || !formData.price) {
+        alert("Product name and price are required");
+        return;
+      }
+
+      const payload = {
+        ...formData,
+        quantity: Number(formData.quantity),
+        price: Number(formData.price),
+      };
+
+      let res;
+
+      if (isEditing && editId) {
+        // 🔐 EDIT INVENTORY (JWT INCLUDED)
+        res = await axiosInstance.put(`/api/inventory/${editId}`, payload);
+
+        setProducts((prev) =>
+          prev.map((p) => (p._id === editId ? res.data : p))
+        );
+      } else {
+        // 🔐 ADD INVENTORY (JWT INCLUDED)
+        res = await axiosInstance.post("/api/inventory", payload);
+
+        setProducts((prev) => [...prev, res.data]);
+      }
+
+      resetForm();
+    } catch (err) {
+      console.error("SUBMIT FAILED:", err.response?.data || err.message);
+
+      if (err.response?.status === 401) {
+        alert("Session expired. Please login again.");
+      } else {
+        alert("Operation failed");
+      }
     }
-
-    const payload = {
-      ...formData,
-      quantity: Number(formData.quantity),
-      price: Number(formData.price),
-    };
-
-    let res;
-
-    if (isEditing && editId) {
-      // 🔐 EDIT INVENTORY (JWT INCLUDED)
-      res = await axiosInstance.put(
-        `/api/inventory/${editId}`,
-        payload
-      );
-
-      setProducts((prev) =>
-        prev.map((p) => (p._id === editId ? res.data : p))
-      );
-    } else {
-      // 🔐 ADD INVENTORY (JWT INCLUDED)
-      res = await axiosInstance.post(
-        "/api/inventory",
-        payload
-      );
-
-      setProducts((prev) => [...prev, res.data]);
-    }
-
-    resetForm();
-  } catch (err) {
-    console.error(
-      "SUBMIT FAILED:",
-      err.response?.data || err.message
-    );
-
-    if (err.response?.status === 401) {
-      alert("Session expired. Please login again.");
-    } else {
-      alert("Operation failed");
-    }
-  }
-};
-
+  };
 
   /* ---------- EDIT ---------- */
   const handleEdit = (product) => {
@@ -156,45 +144,35 @@ const Inventory = () => {
       price: product.price || "",
       category: product.category || "",
       productImage: product.productImage || "",
-      expiryDate: product.expiryDate
-        ? product.expiryDate.split("T")[0]
-        : "",
+      expiryDate: product.expiryDate ? product.expiryDate.split("T")[0] : "",
     });
   };
 
   /* ---------- DELETE ---------- */
   const handleDelete = async (id) => {
-  if (!window.confirm("Delete this product?")) return;
+    if (!window.confirm("Delete this product?")) return;
 
-  try {
-    await axiosInstance.delete(`/api/inventory/${id}`);
+    try {
+      await axiosInstance.delete(`/api/inventory/${id}`);
 
-    setProducts((prev) =>
-      prev.filter((p) => p._id !== id)
-    );
-  } catch (err) {
-    console.error(
-      "DELETE FAILED:",
-      err.response?.data || err.message
-    );
+      setProducts((prev) => prev.filter((p) => p._id !== id));
+    } catch (err) {
+      console.error("DELETE FAILED:", err.response?.data || err.message);
 
-    if (err.response?.status === 401) {
-      alert("Session expired. Please login again.");
-    } else {
-      alert("Delete failed");
+      if (err.response?.status === 401) {
+        alert("Session expired. Please login again.");
+      } else {
+        alert("Delete failed");
+      }
     }
-  }
-};
-
+  };
 
   /* ---------- UI ---------- */
   return (
     <div className="inventory-page">
       <div className="inventory-layout">
-
         {/* SIDEBAR */}
         <aside className="inventory-sidebar">
-
           <div className="sidebar-card compact">
             <h3>{isEditing ? "Edit Product" : "Add Product"}</h3>
 
@@ -260,9 +238,7 @@ const Inventory = () => {
             <label>Category</label>
             <select
               value={selectedCategory}
-              onChange={(e) =>
-                setSelectedCategory(e.target.value)
-              }
+              onChange={(e) => setSelectedCategory(e.target.value)}
             >
               {categories.map((cat) => (
                 <option key={cat}>{cat}</option>
@@ -272,9 +248,7 @@ const Inventory = () => {
             <label>Stock Level</label>
             <select
               value={stockFilter}
-              onChange={(e) =>
-                setStockFilter(e.target.value)
-              }
+              onChange={(e) => setStockFilter(e.target.value)}
             >
               <option>All</option>
               <option>In Stock</option>
@@ -286,16 +260,13 @@ const Inventory = () => {
             <input
               placeholder="Search products..."
               value={searchTerm}
-              onChange={(e) =>
-                setSearchTerm(e.target.value)
-              }
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </aside>
 
         {/* MAIN */}
         <main className="inventory-content">
-
           {/* SUMMARY */}
           <div className="inventory-summary">
             <div className="summary-box">
