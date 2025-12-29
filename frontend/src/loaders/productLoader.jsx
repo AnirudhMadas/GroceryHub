@@ -1,33 +1,26 @@
 import { redirect } from "react-router-dom";
+import axiosInstance from "../utils/axiosInstance";
 
 export const productLoader = async () => {
   const token = localStorage.getItem("token");
 
-  // 🔐 If not logged in, redirect
+  // 🔐 Not logged in → go to auth
   if (!token) {
     return redirect("/auth");
   }
 
   try {
-    const res = await fetch("http://localhost:5000/api/inventory", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axiosInstance.get("/api/inventory");
+    return res.data;
+  } catch (err) {
+    console.error("Inventory loader failed:", err);
 
-    // 🔐 Token invalid or expired
-    if (res.status === 401) {
+    // 🔐 Token expired / invalid
+    if (err.response?.status === 401) {
       localStorage.removeItem("token");
       return redirect("/auth");
     }
 
-    if (!res.ok) {
-      throw new Error("Server error");
-    }
-
-    return await res.json();
-  } catch (err) {
-    console.error("Fetch failed:", err);
     throw err;
   }
 };
