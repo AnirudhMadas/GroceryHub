@@ -34,19 +34,6 @@ const Home = () => {
         </p>
       </section>
 
-      {/* Stats Section */}
-      <section className="home-stats">
-        <div className="stat-card">
-          <h4>Total Products</h4>
-          <p>{totalProducts}</p>
-        </div>
-
-        <div className="stat-card">
-          <h4>Total Quantity</h4>
-          <p>{totalQuantity}</p>
-        </div>
-      </section>
-
       {/* Features Section */}
       <section className="features">
         <h2>Key Features</h2>
