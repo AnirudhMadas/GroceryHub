@@ -6,27 +6,27 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // 🔥 Hydrate auth on app load
   useEffect(() => {
+    const storedUser = localStorage.getItem("user");
     const token = localStorage.getItem("token");
-    const email = localStorage.getItem("email");
 
-    if (token && email) {
-      setUser({ email });
+    if (storedUser && token) {
+      setUser(JSON.parse(storedUser));
     }
 
     setAuthLoading(false);
   }, []);
 
-  const login = ({ email }) => {
-    setUser({ email });
-    localStorage.setItem("email", email);
+  const login = (userData, token) => {
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    if (token) localStorage.setItem("token", token);
   };
 
   const logout = () => {
     setUser(null);
+    localStorage.removeItem("user");
     localStorage.removeItem("token");
-    localStorage.removeItem("email");
   };
 
   return (
