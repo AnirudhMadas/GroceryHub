@@ -18,14 +18,13 @@ const Auth = () => {
     setError("");
 
     try {
-      // ✅ Use axiosInstance instead of hardcoded URL
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
       const res = await axiosInstance.post(endpoint, { email, password });
 
-      localStorage.setItem("token", res.data.token);
-      login(res.data.user);
+      // ✅ SINGLE SOURCE OF TRUTH
+      login(res.data.user, res.data.token);
 
-      navigate("/");
+      navigate("/", { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Authentication failed");
     }
@@ -33,11 +32,15 @@ const Auth = () => {
 
   const googleLogin = () => {
     // ✅ Get base URL from environment or axiosInstance
-    const baseURL = import.meta.env.VITE_API_URL || 
-                    axiosInstance.defaults.baseURL || 
-                    "https://groceryhub-7q1l.onrender.com";
-    
-    console.log('🔵 Redirecting to Google OAuth:', `${baseURL}/api/auth/google`);
+    const baseURL =
+      import.meta.env.VITE_API_URL ||
+      axiosInstance.defaults.baseURL ||
+      "https://groceryhub-7q1l.onrender.com";
+
+    console.log(
+      "🔵 Redirecting to Google OAuth:",
+      `${baseURL}/api/auth/google`
+    );
     window.location.href = `${baseURL}/api/auth/google`;
   };
 
@@ -51,9 +54,7 @@ const Auth = () => {
             {isLogin ? "Sign Up" : "Login"}
           </button>
 
-          <button onClick={googleLogin}>
-            Sign in with Google
-          </button>
+          <button onClick={googleLogin}>Sign in with Google</button>
         </div>
 
         <div className="auth-right">

@@ -19,11 +19,9 @@ export const productLoader = async () => {
 
     // ✅ Handle different error types
     if (err.response?.status === 401) {
-      // Token expired or invalid
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      return redirect("/auth");
-    }
+  return redirect("/auth");
+}
+
 
     if (err.code === "ECONNABORTED" || err.message.includes("timeout")) {
       console.warn("Request timeout - Render cold start");
