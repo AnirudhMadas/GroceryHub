@@ -3,9 +3,18 @@ import { useLoaderData } from "react-router-dom";
 import "../styles/Home.css";
 
 const Home = () => {
-  // ✅ Get data returned by loader
-  const products = useLoaderData();
-  console.log(products);
+  // ✅ Loader data can be ANYTHING → make it safe
+  const loaderData = useLoaderData();
+
+  // ✅ Always work with an array
+  const products = Array.isArray(loaderData) ? loaderData : [];
+
+  // ✅ Safe derived values (NO crashes)
+  const totalProducts = products.length;
+  const totalQuantity = products.reduce(
+    (sum, p) => sum + Number(p?.quantity || 0),
+    0
+  );
 
   return (
     <div className="home-container">
@@ -23,6 +32,19 @@ const Home = () => {
           process transactions, and gain insights through powerful reporting
           tools, all in a user-friendly platform.
         </p>
+      </section>
+
+      {/* Stats Section */}
+      <section className="home-stats">
+        <div className="stat-card">
+          <h4>Total Products</h4>
+          <p>{totalProducts}</p>
+        </div>
+
+        <div className="stat-card">
+          <h4>Total Quantity</h4>
+          <p>{totalQuantity}</p>
+        </div>
       </section>
 
       {/* Features Section */}

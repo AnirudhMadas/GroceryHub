@@ -11,8 +11,7 @@ import Auth from "./pages/Auth";
 import OAuthSuccess from "./pages/OAuthSuccess";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-import { productLoader } from "./loaders/productLoader";
-
+import { productLoader, homeLoader } from "./loaders/productLoader";
 
 /* ---------- LAYOUT ---------- */
 const Layout = () => {
@@ -39,7 +38,7 @@ const router = createBrowserRouter([
             <Home />
           </ProtectedRoute>
         ),
-        loader: productLoader,
+        loader: homeLoader, // ✅ Use homeLoader to prevent redirect loops
       },
 
       {

@@ -4,8 +4,6 @@ import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utils/axiosInstance";
 import "../styles/Auth.css";
 
-const API_URL = "https://groceryhub-7q1l.onrender.com";
-
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -20,11 +18,9 @@ const Auth = () => {
     setError("");
 
     try {
-      const url = isLogin
-        ? `${API_URL}/api/auth/login`
-        : `${API_URL}/api/auth/signup`;
-
-      const res = await axiosInstance.post(url, { email, password });
+      // ✅ Use axiosInstance instead of hardcoded URL
+      const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
+      const res = await axiosInstance.post(endpoint, { email, password });
 
       localStorage.setItem("token", res.data.token);
       login(res.data.user);
@@ -36,7 +32,12 @@ const Auth = () => {
   };
 
   const googleLogin = () => {
-    window.location.href = `${API_URL}/api/auth/google`;
+    // ✅ Get base URL from axiosInstance
+    const baseURL = axiosInstance.defaults.baseURL || 
+                    import.meta.env.VITE_API_URL || 
+                    "https://groceryhub-7q1l.onrender.com";
+    
+    window.location.href = `${baseURL}/api/auth/google`;
   };
 
   return (
@@ -58,6 +59,7 @@ const Auth = () => {
           <form onSubmit={handleSubmit}>
             <input
               type="email"
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -65,6 +67,7 @@ const Auth = () => {
 
             <input
               type="password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
