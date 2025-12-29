@@ -32,11 +32,12 @@ const Auth = () => {
   };
 
   const googleLogin = () => {
-    // ✅ Get base URL from axiosInstance
-    const baseURL = axiosInstance.defaults.baseURL || 
-                    import.meta.env.VITE_API_URL || 
+    // ✅ Get base URL from environment or axiosInstance
+    const baseURL = import.meta.env.VITE_API_URL || 
+                    axiosInstance.defaults.baseURL || 
                     "https://groceryhub-7q1l.onrender.com";
     
+    console.log('🔵 Redirecting to Google OAuth:', `${baseURL}/api/auth/google`);
     window.location.href = `${baseURL}/api/auth/google`;
   };
 

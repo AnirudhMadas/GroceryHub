@@ -14,8 +14,14 @@ const OAuthSuccess = () => {
         const token = params.get("token");
         const email = params.get("email");
 
+        console.log('🔵 OAuth callback received:', { 
+          token: token ? 'Present' : 'Missing', 
+          email: email || 'Missing',
+          fullURL: window.location.href 
+        });
+
         if (!token || !email) {
-          console.error("Missing OAuth parameters");
+          console.error("❌ Missing OAuth parameters");
           setError("Authentication failed. Missing credentials.");
           setTimeout(() => navigate("/auth"), 2000);
           return;
@@ -23,16 +29,20 @@ const OAuthSuccess = () => {
 
         // ✅ Store token first
         localStorage.setItem("token", token);
+        console.log('✅ Token stored');
         
         // ✅ Store user data
         const userData = { email };
         localStorage.setItem("user", JSON.stringify(userData));
+        console.log('✅ User stored:', userData);
         
         // ✅ Update auth context
         login(userData, token);
+        console.log('✅ Auth context updated');
 
         // ✅ Short delay before redirect to ensure state updates
         setTimeout(() => {
+          console.log('✅ Redirecting to home...');
           navigate("/", { replace: true });
         }, 500);
         
