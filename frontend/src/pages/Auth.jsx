@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axiosInstance from "../utils/axiosInstance";
@@ -10,8 +10,15 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { login } = useAuth();
+  const { user, login } = useAuth();
   const navigate = useNavigate();
+
+  // ✅ AUTO-REDIRECT IF ALREADY LOGGED IN
+  useEffect(() => {
+    if (user) {
+      navigate("/", { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,9 +28,10 @@ const Auth = () => {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
       const res = await axiosInstance.post(endpoint, { email, password });
 
-      // ✅ SINGLE SOURCE OF TRUTH
+      // ✅ Single source of truth
       login(res.data.user, res.data.token);
 
+      // ✅ Redirect to Home
       navigate("/", { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Authentication failed");
@@ -31,16 +39,11 @@ const Auth = () => {
   };
 
   const googleLogin = () => {
-    // ✅ Get base URL from environment or axiosInstance
     const baseURL =
       import.meta.env.VITE_API_URL ||
       axiosInstance.defaults.baseURL ||
       "https://groceryhub-7q1l.onrender.com";
 
-    console.log(
-      "🔵 Redirecting to Google OAuth:",
-      `${baseURL}/api/auth/google`
-    );
     window.location.href = `${baseURL}/api/auth/google`;
   };
 
