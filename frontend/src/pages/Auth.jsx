@@ -10,8 +10,8 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // ✅ SINGLE useAuth call
-  const { user, authLoading } = useAuth();
+  // ✅ CORRECT destructuring
+  const { user, login, authLoading } = useAuth();
   const navigate = useNavigate();
 
   // ✅ Redirect logged-in users away from /auth
@@ -29,13 +29,23 @@ const Auth = () => {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
       const res = await axiosInstance.post(endpoint, { email, password });
 
-      // ✅ Save auth
+      // ✅ HARD VALIDATION (CRITICAL)
+      if (!res.data?.user || !res.data?.token) {
+        throw new Error(res.data?.message || "Invalid authentication response");
+      }
+
+      // ✅ Save auth ONLY if valid
       login(res.data.user, res.data.token);
 
-      // ✅ Go to home
+      // ✅ Redirect after successful login
       navigate("/", { replace: true });
     } catch (err) {
-      setError(err.response?.data?.message || "Authentication failed");
+      console.error("Auth error:", err);
+      setError(
+        err.response?.data?.message ||
+          err.message ||
+          "Authentication failed"
+      );
     }
   };
 
