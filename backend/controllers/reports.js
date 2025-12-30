@@ -5,7 +5,6 @@ export const getReports = async (req, res) => {
   try {
     const { search, from, to } = req.query;
 
-    // 🔐 USER FILTER
     const query = {
       userId: req.userId,
     };
@@ -18,23 +17,23 @@ export const getReports = async (req, res) => {
       };
     }
 
-    // 📅 DATE RANGE FILTER (ROBUST)
+    // 📅 DATE RANGE FILTER (FIXED)
     if (from || to) {
-      query.createdAt = {};
+      query.billedAt = {};
 
       if (from) {
-        query.createdAt.$gte = new Date(from);
+        query.billedAt.$gte = new Date(from);
       }
 
       if (to) {
         const endOfDay = new Date(to);
-        endOfDay.setHours(23, 59, 59, 999); // 🔥 INCLUDE FULL DAY
-        query.createdAt.$lte = endOfDay;
+        endOfDay.setHours(23, 59, 59, 999);
+        query.billedAt.$lte = endOfDay;
       }
     }
 
     const reports = await Billing.find(query).sort({
-      createdAt: -1,
+      billedAt: -1,
     });
 
     res.status(200).json(reports);

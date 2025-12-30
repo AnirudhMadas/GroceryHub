@@ -26,14 +26,18 @@ const Reports = () => {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [sales, setSales] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   /* ---------- FETCH REPORTS ---------- */
   const fetchReports = async (params = {}) => {
     try {
+      setLoading(true);
       const res = await axiosInstance.get("/api/reports", { params });
       setSales(res.data);
     } catch (err) {
       console.error("REPORT FETCH ERROR:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,6 +45,7 @@ const Reports = () => {
     fetchReports();
   }, []);
 
+  /* ---------- APPLY FILTERS ---------- */
   const applyFilters = () => {
     fetchReports({
       search,
@@ -49,11 +54,17 @@ const Reports = () => {
     });
   };
 
-  const resetFilters = () => {
+  /* ---------- RESET (UI ONLY – DB SAFE) ---------- */
+  const resetFilters = async () => {
     setSearch("");
     setFromDate("");
     setToDate("");
-    fetchReports();
+
+    // 🔥 Clear UI immediately
+    setSales([]);
+
+    // 🔁 Reload all reports
+    await fetchReports();
   };
 
   /* ---------- METRICS ---------- */
@@ -63,10 +74,7 @@ const Reports = () => {
 
   /* ---------- PRODUCT SALES MAP ---------- */
   const productSales = sales.reduce((acc, item) => {
-    acc[item.productName] = acc[item.productName] || {
-      quantity: 0,
-      revenue: 0,
-    };
+    acc[item.productName] ??= { quantity: 0, revenue: 0 };
     acc[item.productName].quantity += item.quantity;
     acc[item.productName].revenue += item.total;
     return acc;
@@ -75,7 +83,7 @@ const Reports = () => {
   /* ---------- LEAST SOLD PRODUCTS ---------- */
   const leastSoldProducts = Object.entries(productSales)
     .sort((a, b) => a[1].quantity - b[1].quantity)
-    .slice(0, 3); // bottom 3
+    .slice(0, 3);
 
   /* ---------- BAR CHART ---------- */
   const barData = {
@@ -173,7 +181,13 @@ const Reports = () => {
             </tr>
           </thead>
           <tbody>
-            {sales.length === 0 ? (
+            {loading ? (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center" }}>
+                  Loading reports...
+                </td>
+              </tr>
+            ) : sales.length === 0 ? (
               <tr>
                 <td colSpan="5" style={{ textAlign: "center" }}>
                   No reports found
