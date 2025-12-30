@@ -26,18 +26,23 @@ export const signup = async (req, res) => {
       provider: "local",
     });
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      {
+        _id: user._id,
+        email: user.email,
+        provider: "local",
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     res.status(201).json({
-      message: "User registered successfully",
-      token,
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
-        provider: user.provider,
+        provider: "local",
       },
+      token,
     });
   } catch (error) {
     res.status(500).json({
@@ -68,18 +73,23 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      {
+        _id: user._id,
+        email: user.email,
+        provider: "local",
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
     res.status(200).json({
-      message: "Login successful",
-      token,
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
-        provider: user.provider,
+        provider: "local",
       },
+      token,
     });
   } catch (error) {
     res.status(500).json({
