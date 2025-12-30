@@ -28,6 +28,14 @@ const Layout = () => {
 /* ---------- ROUTER ---------- */
 const router = createBrowserRouter([
   {
+    path: "auth",
+    element: <Auth />,
+  },
+  {
+    path: "oauth-success",
+    element: <OAuthSuccess />,
+  },
+  {
     path: "/",
     element: <Layout />,
     children: [
@@ -76,16 +84,6 @@ const router = createBrowserRouter([
             <Alerts />
           </ProtectedRoute>
         ),
-      },
-
-      {
-        path: "auth",
-        element: <Auth />,
-      },
-
-      {
-        path: "oauth-success",
-        element: <OAuthSuccess />,
       },
     ],
   },

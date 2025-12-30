@@ -10,15 +10,16 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const { user, login } = useAuth();
+  // ✅ SINGLE useAuth call
+  const { user, login, authLoading } = useAuth();
   const navigate = useNavigate();
 
-  // ✅ AUTO-REDIRECT IF ALREADY LOGGED IN
+  // ✅ Redirect logged-in users away from /auth
   useEffect(() => {
-    if (user) {
+    if (!authLoading && user) {
       navigate("/", { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, authLoading, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +29,10 @@ const Auth = () => {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
       const res = await axiosInstance.post(endpoint, { email, password });
 
-      // ✅ Single source of truth
+      // ✅ Save auth
       login(res.data.user, res.data.token);
 
-      // ✅ Redirect to Home
+      // ✅ Go to home
       navigate("/", { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Authentication failed");
