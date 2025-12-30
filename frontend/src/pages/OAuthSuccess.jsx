@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axiosInstance from "../utils/axiosInstance";
 
 const OAuthSuccess = () => {
   const navigate = useNavigate();
@@ -12,43 +13,35 @@ const OAuthSuccess = () => {
       try {
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
-        const email = params.get("email");
 
-        console.log('🔵 OAuth callback received:', { 
-          token: token ? 'Present' : 'Missing', 
-          email: email || 'Missing',
-          fullURL: window.location.href 
-        });
-
-        if (!token || !email) {
-          console.error("❌ Missing OAuth parameters");
-          setError("Authentication failed. Missing credentials.");
-          setTimeout(() => navigate("/auth"), 2000);
-          return;
+        if (!token) {
+          throw new Error("Missing OAuth token");
         }
 
-        // ✅ Store token first
+        // ✅ Save token first
         localStorage.setItem("token", token);
-        console.log('✅ Token stored');
-        
-        // ✅ Store user data
-        const userData = { email };
-        localStorage.setItem("user", JSON.stringify(userData));
-        console.log('✅ User stored:', userData);
-        
-        // ✅ Update auth context
-        login(userData, token);
-        console.log('✅ Auth context updated');
 
-        // ✅ Short delay before redirect to ensure state updates
-        setTimeout(() => {
-          console.log('✅ Redirecting to home...');
-          navigate("/", { replace: true });
-        }, 500);
-        
+        // ✅ Fetch FULL user using token
+        const res = await axiosInstance.get("/api/auth/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!res.data?.user) {
+          throw new Error("Failed to fetch user");
+        }
+
+        // ✅ Login with COMPLETE user object
+        login(res.data.user, token);
+
+        // ✅ Redirect to home
+        navigate("/", { replace: true });
       } catch (err) {
         console.error("OAuth error:", err);
-        setError("Authentication failed. Please try again.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setError("Authentication failed. Redirecting to login...");
         setTimeout(() => navigate("/auth"), 2000);
       }
     };
@@ -58,28 +51,15 @@ const OAuthSuccess = () => {
 
   if (error) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        flexDirection: 'column',
-        gap: '1rem'
-      }}>
-        <p style={{ color: 'red' }}>{error}</p>
-        <p>Redirecting to login...</p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <p style={{ color: "red" }}>{error}</p>
       </div>
     );
   }
 
   return (
-    <div style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh' 
-    }}>
-      <p>Signing you in...</p>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+      <p>Signing you in with Google...</p>
     </div>
   );
 };
