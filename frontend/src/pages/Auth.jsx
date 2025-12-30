@@ -11,7 +11,7 @@ const Auth = () => {
   const [error, setError] = useState("");
 
   // ✅ SINGLE useAuth call
-  const { user, login, authLoading } = useAuth();
+  const { user, authLoading } = useAuth();
   const navigate = useNavigate();
 
   // ✅ Redirect logged-in users away from /auth
