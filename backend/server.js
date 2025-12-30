@@ -22,26 +22,31 @@ connectDb();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL, // MUST be exact, no trailing slash
+];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin) return callback(null, true); // allow server-to-server
-      const allowedOrigins = [
-        "http://localhost:5173",
-        process.env.FRONTEND_URL,
-      ];
+      if (!origin) return callback(null, true);
+
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(null, true);
       }
+
+      console.error("Blocked by CORS:", origin);
+      return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-
-
+// 🔥 REQUIRED for preflight requests
+app.options("*", cors());
 
 app.use(passport.initialize());
 
