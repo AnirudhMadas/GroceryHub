@@ -13,28 +13,28 @@ const OAuthSuccess = () => {
       const params = new URLSearchParams(window.location.search);
       const token = params.get("token");
 
-      if (!token) {
-        throw new Error("Missing OAuth token");
-      }
+      if (!token) throw new Error("Missing OAuth token");
 
-      // ✅ Decode JWT to get full user
-      const decodedUser = jwtDecode(token);
+      // 🔐 Mark OAuth flow
+      localStorage.setItem("oauth_in_progress", "true");
 
-      if (!decodedUser || !decodedUser.email) {
+      const decoded = jwtDecode(token);
+
+      if (!decoded?._id || !decoded?.email) {
         throw new Error("Invalid token payload");
       }
 
-      // ✅ Save auth using context
       login(
         {
-          _id: decodedUser._id,
-          email: decodedUser.email,
-          provider: decodedUser.provider || "google",
+          _id: decoded._id,
+          email: decoded.email,
+          provider: decoded.provider || "google",
         },
         token
       );
 
-      // ✅ Redirect to home
+      // ✅ Clear flag & redirect once
+      localStorage.removeItem("oauth_in_progress");
       navigate("/", { replace: true });
     } catch (err) {
       console.error("OAuth error:", err);

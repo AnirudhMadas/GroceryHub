@@ -18,12 +18,11 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // ✅ Check both token and user
-  const token = localStorage.getItem("token");
-  
-  if (!token || !user) {
-    return <Navigate to="/auth" replace />;
-  }
+const token = localStorage.getItem("token");
+if (!token || !user) {
+  return <Navigate to="/auth" replace />;
+}
+
 
   return children;
 };

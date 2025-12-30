@@ -10,13 +10,14 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // ✅ CORRECT destructuring
   const { user, login, authLoading } = useAuth();
   const navigate = useNavigate();
 
-  // ✅ Redirect logged-in users away from /auth
+  /* 🔒 IMPORTANT: Prevent redirect during OAuth flow */
   useEffect(() => {
-    if (!authLoading && user) {
+    const oauthInProgress = localStorage.getItem("oauth_in_progress");
+
+    if (!authLoading && user && !oauthInProgress) {
       navigate("/", { replace: true });
     }
   }, [user, authLoading, navigate]);
@@ -29,15 +30,14 @@ const Auth = () => {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
       const res = await axiosInstance.post(endpoint, { email, password });
 
-      // ✅ HARD VALIDATION (CRITICAL)
+      // ✅ HARD VALIDATION
       if (!res.data?.user || !res.data?.token) {
         throw new Error(res.data?.message || "Invalid authentication response");
       }
 
-      // ✅ Save auth ONLY if valid
+      // ✅ Normal login flow
       login(res.data.user, res.data.token);
 
-      // ✅ Redirect after successful login
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Auth error:", err);
@@ -50,6 +50,9 @@ const Auth = () => {
   };
 
   const googleLogin = () => {
+    // 🔐 Mark OAuth flow start
+    localStorage.setItem("oauth_in_progress", "true");
+
     const baseURL =
       import.meta.env.VITE_API_URL ||
       axiosInstance.defaults.baseURL ||
