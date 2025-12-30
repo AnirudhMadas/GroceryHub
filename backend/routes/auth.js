@@ -26,16 +26,19 @@ router.get(
   }),
   (req, res) => {
     const token = jwt.sign(
-      { userId: req.user._id },
+      {
+        _id: req.user._id,
+        email: req.user.email,
+        provider: "google",
+      },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
-    const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+    const FRONTEND_URL =
+      process.env.FRONTEND_URL || "http://localhost:5173";
 
-    res.redirect(
-      `${FRONTEND_URL}/oauth-success?token=${token}&email=${req.user.email}`
-    );
+    res.redirect(`${FRONTEND_URL}/oauth-success?token=${token}`);
   }
 );
 
