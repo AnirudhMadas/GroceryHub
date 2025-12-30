@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { jwtDecode } from "jwt-decode";
@@ -6,17 +6,19 @@ import { jwtDecode } from "jwt-decode";
 const OAuthSuccess = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const hasRun = useRef(false); // 🔒 HARD GUARD
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    // 🚫 Prevent multiple executions (STRICT MODE / HYDRATION)
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     try {
       const params = new URLSearchParams(window.location.search);
       const token = params.get("token");
 
       if (!token) throw new Error("Missing OAuth token");
-
-      // 🔐 Mark OAuth flow
-      localStorage.setItem("oauth_in_progress", "true");
 
       const decoded = jwtDecode(token);
 
@@ -33,44 +35,20 @@ const OAuthSuccess = () => {
         token
       );
 
-      // ✅ Clear flag & redirect once
-      localStorage.removeItem("oauth_in_progress");
       navigate("/", { replace: true });
     } catch (err) {
       console.error("OAuth error:", err);
       localStorage.clear();
       setError("Authentication failed. Redirecting to login...");
-      setTimeout(() => navigate("/auth"), 2000);
+      setTimeout(() => navigate("/auth"), 1500);
     }
   }, [login, navigate]);
 
   if (error) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <p style={{ color: "red" }}>{error}</p>
-      </div>
-    );
+    return <p style={{ textAlign: "center", color: "red" }}>{error}</p>;
   }
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <p>Signing you in with Google...</p>
-    </div>
-  );
+  return <p style={{ textAlign: "center" }}>Signing you in with Google…</p>;
 };
 
 export default OAuthSuccess;
