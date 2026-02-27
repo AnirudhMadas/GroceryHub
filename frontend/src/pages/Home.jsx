@@ -1,20 +1,18 @@
 import React from "react";
-import { useLoaderData } from "react-router-dom";
+//import { useLoaderData } from "react-router-dom";
 import "../styles/Home.css";
 
 const Home = () => {
-  // ✅ Loader data can be ANYTHING → make it safe
-  const loaderData = useLoaderData();
 
-  // ✅ Always work with an array
-  const products = Array.isArray(loaderData) ? loaderData : [];
+  // const loaderData = useLoaderData();
 
-  // ✅ Safe derived values (NO crashes)
-  const totalProducts = products.length;
-  const totalQuantity = products.reduce(
-    (sum, p) => sum + Number(p?.quantity || 0),
-    0
-  );
+  // const products = Array.isArray(loaderData) ? loaderData : [];
+
+  // const totalProducts = products.length;
+  // const totalQuantity = products.reduce(
+  //   (sum, p) => sum + Number(p?.quantity || 0),
+  //   0
+  // );
 
   return (
     <div className="home-container">
