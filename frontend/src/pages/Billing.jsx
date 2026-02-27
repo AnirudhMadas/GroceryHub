@@ -35,7 +35,7 @@ const Billing = () => {
     if (availableStock <= 0) return;
 
     if (isExpired(product.expiryDate)) {
-      alert("❌ This product is expired");
+      alert("This product is expired");
       return;
     }
 

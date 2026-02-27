@@ -1,18 +1,7 @@
 import React from "react";
-//import { useLoaderData } from "react-router-dom";
 import "../styles/Home.css";
 
 const Home = () => {
-
-  // const loaderData = useLoaderData();
-
-  // const products = Array.isArray(loaderData) ? loaderData : [];
-
-  // const totalProducts = products.length;
-  // const totalQuantity = products.reduce(
-  //   (sum, p) => sum + Number(p?.quantity || 0),
-  //   0
-  // );
 
   return (
     <div className="home-container">

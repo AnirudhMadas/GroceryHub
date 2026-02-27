@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// ✅ Create axios instance with proper configuration
+// Create axios instance with proper configuration
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "https://groceryhub-7q1l.onrender.com",
   timeout: 30000, // 30 seconds for Render cold starts
@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
   },
 });
 
-// ✅ Add JWT token to all requests
+// Add JWT token to all requests
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -23,7 +23,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// ✅ Handle 401 errors (token expired)
+// Handle 401 errors (token expired)
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {

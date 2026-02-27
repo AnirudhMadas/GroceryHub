@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: "User", // ✅ SAME COLLECTION
+    collection: "User",
   }
 );
 

@@ -13,7 +13,6 @@ const Auth = () => {
   const { user, login, authLoading } = useAuth();
   const navigate = useNavigate();
 
-  // ✅ Simple, correct redirect for already-logged-in users
   useEffect(() => {
     if (!authLoading && user) {
       navigate("/", { replace: true });
@@ -28,15 +27,15 @@ const Auth = () => {
       const endpoint = isLogin ? "/api/auth/login" : "/api/auth/signup";
       const res = await axiosInstance.post(endpoint, { email, password });
 
-      // ✅ Validate backend response
+      // Validate backend response
       if (!res.data?.user || !res.data?.token) {
         throw new Error(res.data?.message || "Invalid authentication response");
       }
 
-      // ✅ Save auth state
+      // Save auth state
       login(res.data.user, res.data.token);
 
-      // ✅ Redirect once
+      // Redirect once
       navigate("/", { replace: true });
     } catch (err) {
       console.error("Auth error:", err);

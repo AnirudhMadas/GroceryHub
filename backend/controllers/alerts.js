@@ -6,7 +6,7 @@ const LOW_STOCK_LIMIT = 10;
 export const getLowStockAlerts = async (req, res) => {
   try {
     const items = await inventorySchema.find({
-      userId: req.userId, // 🔥 USER FILTER
+      userId: req.userId, 
       quantity: { $gt: 0, $lte: LOW_STOCK_LIMIT },
     });
 
@@ -21,7 +21,7 @@ export const getLowStockAlerts = async (req, res) => {
 export const getOutOfStockAlerts = async (req, res) => {
   try {
     const items = await inventorySchema.find({
-      userId: req.userId, // 🔥 USER FILTER
+      userId: req.userId,
       quantity: 0,
     });
 
@@ -39,7 +39,7 @@ export const reorderItem = async (req, res) => {
 
     const item = await inventorySchema.findOne({
       _id: id,
-      userId: req.userId, // 🔥 OWNERSHIP CHECK
+      userId: req.userId, 
     });
 
     if (!item) {

@@ -59,11 +59,7 @@ const Reports = () => {
     setSearch("");
     setFromDate("");
     setToDate("");
-
-    // 🔥 Clear UI immediately
     setSales([]);
-
-    // 🔁 Reload all reports
     await fetchReports();
   };
 

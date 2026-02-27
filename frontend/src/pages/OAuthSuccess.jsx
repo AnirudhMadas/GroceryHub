@@ -6,11 +6,11 @@ import { jwtDecode } from "jwt-decode";
 const OAuthSuccess = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const hasRun = useRef(false); // 🔒 HARD GUARD
+  const hasRun = useRef(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // 🚫 Prevent multiple executions (STRICT MODE / HYDRATION)
+    // Prevent multiple executions (STRICT MODE / HYDRATION)
     if (hasRun.current) return;
     hasRun.current = true;
 

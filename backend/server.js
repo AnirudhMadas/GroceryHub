@@ -15,16 +15,15 @@ import "./config/passport.js";
 
 const app = express();
 
-/* ---------- DB ---------- */
 connectDb();
 
-/* ---------- MIDDLEWARE ---------- */
+//MIDDLEWARE 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   "http://localhost:5173",
-  process.env.FRONTEND_URL, // MUST be exact, no trailing slash
+  process.env.FRONTEND_URL,
 ];
 
 app.use(
@@ -45,7 +44,6 @@ app.use(
   })
 );
 
-// 🔥 REQUIRED for preflight requests
 app.options("*", cors());
 
 app.use(passport.initialize());
@@ -64,5 +62,5 @@ app.use("/api/alerts", alertsRouter);
 /* ---------- START SERVER ---------- */
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

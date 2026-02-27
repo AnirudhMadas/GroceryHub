@@ -13,10 +13,9 @@ const createBilling = async (req, res) => {
     const billingDocs = [];
 
     for (const item of items) {
-      // 🔥 FIND INVENTORY BELONGING TO CURRENT USER
       const product = await Inventory.findOne({
         productName: item.productName,
-        userId: req.userId, // 👈 CRITICAL FIX
+        userId: req.userId,
       });
 
       if (!product || product.quantity < item.quantity) {
@@ -25,21 +24,18 @@ const createBilling = async (req, res) => {
         });
       }
 
-      // 🔻 REDUCE STOCK
       product.quantity -= item.quantity;
       await product.save();
 
-      // 🧾 PREPARE BILL RECORD
       billingDocs.push({
         productName: item.productName,
         quantity: item.quantity,
         price: item.price,
         total: item.total,
-        userId: req.userId, // 👈 ATTACH USER
+        userId: req.userId,
       });
     }
-
-    // 🔥 SAVE USER-SCOPED BILLING
+    
     await Billing.insertMany(billingDocs);
 
     res.status(201).json({ message: "Billing saved successfully" });

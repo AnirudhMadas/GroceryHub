@@ -4,7 +4,7 @@ import inventorySchema from "../models/item.js";
 const getInventory = async (req, res) => {
   try {
     const inventory = await inventorySchema.find({
-      userId: req.userId, // 👈 ONLY CURRENT USER DATA
+      userId: req.userId, // ONLY CURRENT USER DATA
     });
 
     return res.status(200).json(inventory);
@@ -39,7 +39,7 @@ const addInventory = async (req, res) => {
       category,
       productImage,
       expiryDate,
-      userId: req.userId, // 🔥 ATTACH USER
+      userId: req.userId,
     });
 
     return res.status(201).json(newItem);
@@ -59,7 +59,7 @@ const editInventory = async (req, res) => {
     }
 
     const updatedItem = await inventorySchema.findOneAndUpdate(
-      { _id: id, userId: req.userId }, // 🔥 CHECK OWNER
+      { _id: id, userId: req.userId }, 
       req.body,
       {
         new: true,
@@ -87,7 +87,7 @@ const deleteInventory = async (req, res) => {
 
     const deletedItem = await inventorySchema.findOneAndDelete({
       _id: id,
-      userId: req.userId, // 🔥 CHECK OWNER
+      userId: req.userId, // ENSURE USER CAN ONLY DELETE THEIR OWN ITEMS
     });
 
     if (!deletedItem) {

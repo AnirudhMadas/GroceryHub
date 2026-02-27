@@ -9,7 +9,7 @@ export const getReports = async (req, res) => {
       userId: req.userId,
     };
 
-    // 🔎 PRODUCT SEARCH
+    // PRODUCT SEARCH
     if (search) {
       query.productName = {
         $regex: search,
@@ -17,7 +17,7 @@ export const getReports = async (req, res) => {
       };
     }
 
-    // 📅 DATE RANGE FILTER (FIXED)
+    // DATE RANGE FILTER 
     if (from || to) {
       query.billedAt = {};
 

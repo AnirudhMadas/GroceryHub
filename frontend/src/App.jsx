@@ -46,7 +46,7 @@ const router = createBrowserRouter([
             <Home />
           </ProtectedRoute>
         ),
-        loader: homeLoader, // ✅ Use homeLoader to prevent redirect loops
+        loader: homeLoader, 
       },
 
       {

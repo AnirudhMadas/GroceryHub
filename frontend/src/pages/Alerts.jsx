@@ -26,6 +26,7 @@ const Alerts = () => {
 
       const query = encodeURIComponent(`${productName} ${category || ""}`);
       window.open(`https://www.amazon.in/s?k=${query}`, "_blank");
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       alert("Reorder failed");
     }
